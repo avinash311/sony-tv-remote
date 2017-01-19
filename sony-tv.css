@@ -32,6 +32,9 @@ body {
   margin: 0.5em 20px;
 }
 
+.row-item {
+}
+
 button {
   margin: 0.5em 0; /* this also helps on narrow width displays when the buttons are stacked */
   display: inline-block;
@@ -65,8 +68,8 @@ button {
   background: linear-gradient(#aca, #afa); /* Standard syntax */
 }
 
-.tv-volume .tv-command,
-.tv-channels .tv-command {
+#tv-volume .tv-command,
+#tv-channels .tv-command {
   width: 12em;
 }
 

@@ -3,7 +3,7 @@
   "name": "Sony TV Web Page Remote",
   "version": "1.0",
 
-  "description": "Sends commands to a Sony TV from a web page.",
+  "description": "Sends commands to a Sony Bravia TV from a web page.",
 
   "background": {
     "scripts": ["background.js"]
