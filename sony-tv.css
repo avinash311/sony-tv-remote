@@ -1,0 +1,105 @@
+/**
+ * Sony TV Web Page Remote
+ * CSS3
+ */
+
+div.three-columns {
+  -webkit-column-count: 3; /* Chrome, Safari, Opera */
+  -moz-column-count: 3; /* Firefox */
+  column-count: 3;
+  -webkit-column-gap: 3em;
+  -moz-column-gap: 3em;
+  column-gap: 3em;
+}
+
+div.four-columns {
+  -webkit-column-count: 4; /* Chrome, Safari, Opera */
+  -moz-column-count: 4; /* Firefox */
+  column-count: 4;
+  -webkit-column-gap: 3em;
+  -moz-column-gap: 3em;
+  column-gap: 3em;
+}
+
+body {
+  background: #ECECEC;
+  margin:0px auto;
+  color:#333;
+  font-size: 1.2em;
+}
+
+.row {
+  margin: 0.5em 20px;
+}
+
+button {
+  margin: 0.5em 0; /* this also helps on narrow width displays when the buttons are stacked */
+  display: inline-block;
+  font-size: 1.0em;
+  text-decoration: none;
+}
+/**
+ * Each tv command should be displayed in larger size.
+ */
+.tv-command {
+  background: #ececec;
+  border-radius: 15px;
+  padding: 20px 0;
+  display: inline-block;
+  font-size: 1.3em;
+  font-weight: bold;
+  text-decoration: none;
+
+  margin: 0.5em 0; /* this also helps on narrow width displays when the buttons are stacked */
+
+  width: 6em; /* default width */
+
+  background: #aac; /* For browsers that do not support gradients */
+  background: linear-gradient(#aac, #aaf); /* Standard syntax */
+}
+.tv-command i {
+  font-style: normal;
+}
+.tv-command:hover {
+  background: #aca; /* For browsers that do not support gradients */
+  background: linear-gradient(#aca, #afa); /* Standard syntax */
+}
+
+.tv-volume .tv-command,
+.tv-channels .tv-command {
+  width: 12em;
+}
+
+/* Tabs */
+ul.tabs-navigation {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #BBB;
+  font-weight: bold;
+  border: 1px solid black;
+}
+
+.tabs-navigation li {
+  float: left;
+  border-right: 1px solid black;
+}
+
+.tabs-navigation li a {
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Javascript adds this class to highlight active tab link */
+.tab-color-active {
+  background-color: #5B5;
+}
+
+/* Change the link color to on hover */
+.tabs-navigation li a:hover {
+  background-color: #292;
+}
