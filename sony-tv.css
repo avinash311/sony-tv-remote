@@ -4,8 +4,10 @@
  */
 
 div.three-columns {
-  -webkit-column-count: 3; /* Chrome, Safari, Opera */
-  -moz-column-count: 3; /* Firefox */
+  -webkit-column-count: 3;
+  /* Chrome, Safari, Opera */
+  -moz-column-count: 3;
+  /* Firefox */
   column-count: 3;
   -webkit-column-gap: 3em;
   -moz-column-gap: 3em;
@@ -13,8 +15,10 @@ div.three-columns {
 }
 
 div.four-columns {
-  -webkit-column-count: 4; /* Chrome, Safari, Opera */
-  -moz-column-count: 4; /* Firefox */
+  -webkit-column-count: 4;
+  /* Chrome, Safari, Opera */
+  -moz-column-count: 4;
+  /* Firefox */
   column-count: 4;
   -webkit-column-gap: 3em;
   -moz-column-gap: 3em;
@@ -23,8 +27,8 @@ div.four-columns {
 
 body {
   background: #ECECEC;
-  margin:0px auto;
-  color:#333;
+  margin: 0px auto;
+  color: #333;
   font-size: 1.0em;
 }
 
@@ -32,18 +36,21 @@ body {
   margin: 0.5em 20px;
 }
 
-.row-item {
-}
+.row-item {}
 
 button {
-  margin: 0.5em 0; /* this also helps on narrow width displays when the buttons are stacked */
+  margin: 0.5em 0;
+  /* this also helps on narrow width displays when the buttons are stacked */
   display: inline-block;
   font-size: 1.0em;
   text-decoration: none;
 }
+
+
 /**
  * Each tv command should be displayed in larger size.
  */
+
 .tv-command {
   background: #ececec;
   border-radius: 15px;
@@ -52,20 +59,25 @@ button {
   font-size: 1.1em;
   font-weight: bold;
   text-decoration: none;
-
-  margin: 0.5em 0; /* this also helps on narrow width displays when the buttons are stacked */
-
-  width: 6em; /* default width */
-
-  background: #aac; /* For browsers that do not support gradients */
-  background: linear-gradient(#aac, #aaf); /* Standard syntax */
+  margin: 0.5em 0;
+  /* this also helps on narrow width displays when the buttons are stacked */
+  width: 6em;
+  /* default width */
+  background: #aac;
+  /* For browsers that do not support gradients */
+  background: linear-gradient(#aac, #aaf);
+  /* Standard syntax */
 }
+
 .tv-command i {
   font-style: normal;
 }
+
 .tv-command:hover {
-  background: #aca; /* For browsers that do not support gradients */
-  background: linear-gradient(#aca, #afa); /* Standard syntax */
+  background: #aca;
+  /* For browsers that do not support gradients */
+  background: linear-gradient(#aca, #afa);
+  /* Standard syntax */
 }
 
 #tv-volume .tv-command,
@@ -73,7 +85,9 @@ button {
   width: 12em;
 }
 
+
 /* Tabs */
+
 ul.tabs-navigation {
   list-style-type: none;
   margin: 0;
@@ -98,12 +112,16 @@ ul.tabs-navigation {
   text-decoration: none;
 }
 
+
 /* Javascript adds this class to highlight active tab link */
+
 .tab-color-active {
   background-color: #5B5;
 }
 
+
 /* Change the link color to on hover */
+
 .tabs-navigation li a:hover {
   background-color: #292;
 }

@@ -1,28 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>Sony TV Web Page Remote</title>
   <meta name="description" content="Control a Sony Bravia TV by sending remote commands.">
   <meta name="author" content="avinash@aczoom.com">
-
   <!-- Mobile Specific Metas -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <link rel="stylesheet" href="sony-tv.css">
+  <link rel="icon" type="image/png" href="images/tv-icon-128.png"> </head>
 
-  <link rel="icon" type="image/png" href="images/tv-icon-128.png">
-</head>
 <body>
   <h1>Sony TV Remote</h1>
   <ul class="tabs-navigation">
     <!-- id of links must be same id as tab, with -link replaced by -content.
          Ex: tab-buttons-link and tab-buttons-content -->
-    <li class="tab-link" id="tab-buttons-link"><a>Buttons</a></li>
-    <li class="tab-link" id="tab-setup-link"><a>Setup</a></li>
-    <li class="tab-link" id="tab-help-link"><a>Help</a></li>
+    <li class="tab-link" id="tab-buttons-link"><a>Buttons</a> </li>
+    <li class="tab-link" id="tab-setup-link"><a>Setup</a> </li>
+    <li class="tab-link" id="tab-help-link"><a>Help</a> </li>
   </ul>
-
   <!-- =================================================================
      Sony TV Web Page Remote
      Uses Sony Bravia TV IRCC (IR like control commands) sent using HTTP POST.
@@ -42,163 +39,153 @@
      TV IRCC" to find references. Example:
      http://www.openremote.org/display/forums/Sony+TV+HTTP+control?focusedCommentId=23601972#comment-23601972
   ================================================================= -->
-
   <hr>
   <div class="tabs-all-content">
-  <div class="tab-content" id="tab-buttons-content">
-  <!-- Volume -->
-  <div class="row three-columns" id="tv-volume">
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="Mute"><i>&#x1F50A;</i> Mute <i>&#x1F507;</i></button>
+    <div class="tab-content" id="tab-buttons-content">
+      <!-- Volume -->
+      <div class="row three-columns" id="tv-volume">
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="Mute"><i>&#x1F50A;</i> Mute <i>&#x1F507;</i> </button>
+        </div>
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="VolumeUp">Volume Up <i>&#x25B2;</i> </button>
+        </div>
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="VolumeDown">Volume Down <i>&#x25BC;</i> </button>
+        </div>
+      </div>
+      <hr>
+      <!-- Channels -->
+      <div class="row three-columns" id="tv-channels">
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="ChannelUp">Channel Up <i>&#x25B2;</i> </button>
+        </div>
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="ChannelDown">Channel Down <i>&#x25BC;</i> </button>
+        </div>
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="Jump">Previous <i>&#x21B6;</i> </button>
+        </div>
+      </div>
+      <hr>
+      <!-- Channel Numbers -->
+      <div class="row four-columns" id="tv-channel-numbers">
+        <!-- these child elements are dynamically created based on user setup options -->
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="2.1">2.1</button>
+        </div>
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="7.1">7.1</button>
+        </div>
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="38.1">38.1</button>
+        </div>
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="62.4">62.4</button>
+        </div>
+      </div>
+      <hr>
+      <!-- Display aspect ratio -->
+      <div class="row four-columns" id="tv-display-ratio">
+        <!-- these won't work unless a long 0.5 sec or so delay is sent between Up/Down commands -->
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="Wide Up Up Up Return">Wide&nbsp;Zoom <i></i> </button>
+        </div>
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="Wide Down Down Down Up Up Return">Normal<i></i> </button>
+        </div>
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="Wide Up Return">Wide&nbsp;Zoom
+            <br>Normal <i>&#x21E1;</i>
+            <br>Full <i>&#x21E1;</i>
+            <br>Zoom <i>&#x21E1;</i> </button>
+        </div>
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="Wide Down Return">Wide&nbsp;Zoom
+            <br>Normal <i>&#x21E3;</i>
+            <br>Full <i>&#x21E3;</i>
+            <br>Zoom <i>&#x21E3;</i> </button>
+        </div>
+      </div>
+      <hr>
+      <!-- Power -->
+      <div class="row three-columns" id="tv-power">
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="TvPower">ON &middot; OFF <i></i> </button>
+        </div>
+        <div class="row-item">
+          <button type="button" class="tv-command" data-stv:commands="PowerOff">OFF <i>&#x2B58;</i> </button>
+        </div>
+      </div>
     </div>
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="VolumeUp">Volume Up <i>&#x25B2;</i></button>
+    <!-- tab-buttons-content -->
+    <!-- Setup -->
+    <hr>
+    <div class="row tab-content" id="tab-setup-content">
+      <h2>TV Setup</h2>
+      <form id="tv-setup">
+        <fieldset>
+          <legend>Setup</legend>
+          <p>
+            <label for="tv-ip-address">Sony TV IP Address:</label>
+            <input type="text" id="tv-ip-address" placeholder="Example: 10.0.0.100"> </p>
+          <p>
+            <label for="tv-key">Sony TV Pre-Shared Key:</label>
+            <input type="password" id="tv-key" placeholder="Enter TV Pre-Shared Key"> </p>
+          <hr>
+          <p>
+            <label for="make-channel-buttons">Create buttons for these channels:</label>
+            <input type="text" id="make-channel-buttons" size="60" placeholder="Example:  2.1  38.1  44.4">
+            <p/>
+            <p></p>
+            <button type="submit">Save</button>
+        </fieldset>
+      </form>
+      <p class="messages"></p>
+      <!-- Javascript error or status message -->
     </div>
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="VolumeDown">Volume Down <i>&#x25BC;</i></button>
+    <!-- Help and About -->
+    <hr>
+    <div class="row tab-content" id="tab-help-content">
+      <h2>Help</h2>
+      <p>For details on how this works, the best choice is looking at the source code: <a href="https://github.com/avinash311/sony-tv-remote">Sony TV Web Page Remote source code</a>.</p>
+      <p>Using this requires the TV to support IRCC control (Sony Bravia TV infrared like control commands), have a fixed IP
+        address, and allow remote access using a pre-shared key.</p>
+      <p>Set pre-shared key on your TV by accessing this or similar page on your TV: [Settings] [Network] [Home Network Setup]
+        [IP Control] [Pre-Shared Key]
+        <br> Set [Authentication] to [Normal and Pre-Shared Key]
+        <br> Enter your selected key there, and on this page in the Setup form.</p>
+      <p>If the TV IP address is not fixed, give your TV a static IP address or make a DHCP reservation for a specific IP address
+        in your router.</p>
+      <p>Enter the TV IP and Key in the Setup form on this page, and click Save.
+        <br> Once that is done, the buttons on the page can be used to send commands.</p>
+      <p>Enter the list of over-the-air channels you want direct access to.
+        <br> This will create a button for each channel.</p>
+      <p>The Javascript code prints out status and error messages to the Javascript Console.
+        <br> To see the messages, open up your browser's Developer Tools or similar to see the Console messages.
+        <br> For example, in Firefox type Control-Shift-J or click on [Menu] [Developer] [Browser console] to open the Console
+        and look at the JS (Javascript) Tab to see messages from this script.</p>
+      <h3>Code Changes</h3>
+      <p>The extension as shipped should be usable by most everyone, since it also allows for custom set of channel buttons.
+        <br> But if additional buttons are needed, the code can be edited locally.
+        <br> The web page can be edited as needed by downloading the entire web extension <a href="https://github.com/avinash311/sony-tv-remote">source code</a>        locally.
+        <br> The extension can then be loaded from the local directory.
+        <br> When making such edits, make sure to enter the TV IP and Key into the variables otherwise you will have to enter
+        setup each time you restart your browser, since the extension has to reloaded on each restart.
+        <br> To locally load the add-on in Firefox: visit the about:debugging page and then in [Add-ons] use the
+        [Load Temporary Add-on] button and select any file in the folder where this extension is stored.
+        <br>In Chrome, visit [More Tools] [Extensions] and use the [Local unpacked extension...] command.
+        <br>(<em>This has only been tested on Firefox</em>.)</p>
+      <h2>About</h2>
+      <p>About: Sony TV Remote Web Extension. Version: <span class="about-version"></span> </p>
+      <p><a href="http://www.aczoom.com/tech/sony-tv-remote/">aczoom.com/tech/sony-tv-remote/</a> </p>
     </div>
+    <!-- tab-help-content -->
   </div>
-
-  <hr>
-  <!-- Channels -->
-  <div class="row three-columns" id="tv-channels">
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="ChannelUp">Channel Up <i>&#x25B2;</i></button>
-    </div>
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="ChannelDown">Channel Down <i>&#x25BC;</i></button>
-    </div>
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="Jump">Previous <i>&#x21B6;</i></button>
-    </div>
-  </div>
-
-  <hr>
-  <!-- Channel Numbers -->
-  <div class="row four-columns" id="tv-channel-numbers">
-    <!-- these child elements are dynamically created based on user setup options -->
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="2.1">2.1</button>
-    </div>
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="7.1">7.1</button>
-    </div>
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="38.1">38.1</button>
-    </div>
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="62.4">62.4</button>
-    </div>
-  </div>
-
-  <hr>
-  <!-- Display aspect ratio -->
-  <div class="row four-columns" id="tv-display-ratio">
-    <!-- these won't work unless a long 0.5 sec or so delay is sent between Up/Down commands -->
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="Wide Up Up Up Return">Wide&nbsp;Zoom <i></i></button>
-    </div>
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="Wide Down Down Down Up Up Return">Normal<i></i></button>
-    </div>
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="Wide Up Return">Wide&nbsp;Zoom<br>Normal <i>&#x21E1;</i><br>Full <i>&#x21E1;</i><br>Zoom <i>&#x21E1;</i></button>
-    </div>
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="Wide Down Return">Wide&nbsp;Zoom<br>Normal <i>&#x21E3;</i><br>Full <i>&#x21E3;</i><br>Zoom <i>&#x21E3;</i></button>
-    </div>
-  </div>
-
-  <hr>
-  <!-- Power -->
-  <div class="row three-columns" id="tv-power">
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="TvPower">ON &middot; OFF <i></i></button>
-    </div>
-    <div class="row-item">
-      <button type="button" class="tv-command" data-stv:commands="PowerOff">OFF <i>&#x2B58;</i></button>
-    </div>
-  </div>
-  </div><!-- tab-buttons-content -->
-
-  <!-- Setup -->
-  <hr>
-  <div class="row tab-content" id="tab-setup-content">
-    <h2>TV Setup</h2>
-    <form id="tv-setup">
-      <fieldset>
-        <legend>Setup</legend>
-        <p>
-        <label for="tv-ip-address">Sony TV IP Address:</label>
-        <input type="text" id="tv-ip-address" placeholder="Example: 10.0.0.100">
-        </p>
-
-        <p>
-        <label for="tv-key">Sony TV Pre-Shared Key:</label>
-        <input type="password" id="tv-key" placeholder="Enter TV Pre-Shared Key">
-        </p>
-
-        <hr>
-        <p>
-        <label for="make-channel-buttons">Create buttons for these channels:</label>
-        <input type="text" id="make-channel-buttons" size="60" placeholder="Example:  2.1  38.1  44.4">
-        <p/>
-        <p></p>
-        <button type="submit">Save</button>
-      </fieldset>
-    </form>
-    <p class="messages"></p><!-- Javascript error or status message -->
-  </div>
-
-  <!-- Help and About -->
-  <hr>
-  <div class="row tab-content" id="tab-help-content">
-    <h2>Help</h2>
-    <p>For details on how this works, the best choice is looking at the source code:
-       <a href="https://github.com/avinash311/sony-tv-remote">Sony TV Web Page Remote source code</a>.</p>
-    <p>Using this requires the TV to support IRCC control (Sony Bravia TV infrared like control commands),
-       have a fixed IP address, and allow remote access using a pre-shared key.</p>
-    <p>Set pre-shared key on your TV by accessing this or similar page on your TV: [Settings]  [Network]  [Home Network Setup]  [IP Control]  [Pre-Shared Key]<br>
-       Set [Authentication] to [Normal and Pre-Shared Key]<br>
-       Enter your selected key there, and on this page in the Setup form.</p>
-
-    <p>If the TV IP address is not fixed, give your TV a static IP address or make a DHCP reservation for a specific IP address in your router.</p>
-
-    <p>Enter the TV IP and Key in the Setup form on this page, and click Save.<br>
-       Once that is done, the buttons on the page can be used to send commands.</p>
-
-    <p>Enter the list of over-the-air channels you want direct access to.<br>
-       This will create a button for each channel.</p>
-
-    <p>The Javascript code prints out status and error messages to the Javascript Console.<br>
-       To see the messages, open up your browser's Developer Tools or similar to see the Console messages.<br>
-       For example, in Firefox type Control-Shift-J or click on [Menu] [Developer]
-       [Browser console] to open the Console and look at the JS (Javascript) Tab to see
-       messages from this script.</p>
-
-    <h3>Code Changes</h3>
-    <p>The extension as shipped should be usable by most everyone, since it also allows
-       for custom set of channel buttons.<br>
-       But if additional buttons are needed, the code can be edited locally.<br>
-       The web page can be edited as needed by downloading the entire web extension 
-       <a href="https://github.com/avinash311/sony-tv-remote">source code</a> locally.<br>
-       The extension can then be loaded from the local directory.<br>
-       When making such edits, make sure to enter the TV IP and Key into the variables
-       otherwise you will have to enter setup each time you restart your browser, since
-       the extension has to reloaded on each restart.</br>
-       To locally load the add-on in Firefox: visit the about:debugging page and then
-       in [Add-ons] use the [Load Temporary Add-on] button and select any file in the folder where this
-       extension is stored. In Chrome, visit [More Tools] [Extensions] and use the [Local unpacked extension...]
-       command. (<em>This has only been tested on Firefox</em>.) </p>
-
-    <h2>About</h2>
-    <p>About: Sony TV Remote Web Extension. Version: <span class="about-version"></span></p>
-    <p><a href="http://www.aczoom.com/tech/sony-tv-remote/">aczoom.com/tech/sony-tv-remote/</a></p>
-  </div><!-- tab-help-content -->
-  </div><!-- tabs-all-content -->
-
+  <!-- tabs-all-content -->
   <hr>
   <!-- End Document =============================================== -->
   <script src="sony-tv.js"></script>
 </body>
+
 </html>

@@ -24,7 +24,7 @@
 let SONY_TV_IP = ''; // updated from local storage
 let SONY_TV_PRESHARED_KEY = '';
 // Default list of channels to show as quick-access channel buttons
-let MAKE_CHANNEL_BUTTONS = '2.1 4.1 5.1 7.2 25.3 27.1 38.1 56.1 62.2 62.3 66.3 66.4';
+let MAKE_CHANNEL_BUTTONS = '2.1 4.1 5.1 7.2 25.3 27.1 38.1 56.1 62.3 62.4 66.2 66.4';
 
 const SONY_TV_URL_PREFIX = 'http://';
 const SONY_TV_URL_SUFFIX = '/sony/IRCC';
@@ -39,7 +39,7 @@ const ID_MAKE_CHANNEL_BUTTONS = 'make-channel-buttons'; // channel numbers
 const ID_CHANNEL_NUMBERS = 'tv-channel-numbers'; // displays channel buttons
 const CLASS_TAB_CONTENT = 'tab-content'; // each tab content div (buttons, etc)
 const CLASS_TAB_LINK = 'tab-link'; // navigation bar for the tabs
-const CSS_TAB_LINK_ACTIVE = 'tab-color-active';  // css of active tab link
+const CSS_TAB_LINK_ACTIVE = 'tab-color-active'; // css of active tab link
 
 // key names used to store data in (local storage or browser.storage)
 const STORE_TV_IP = 'SonyTVIP';
@@ -92,7 +92,8 @@ function sendCode(code) {
   // an Invalid Action error from TV!
   req.setRequestHeader('SOAPAction', '"urn:schemas-sony-com:service:IRCC:1#X_SendIRCC"');
   req.setRequestHeader('X-Auth-PSK', SONY_TV_PRESHARED_KEY);
-  const data = `<?xml version="1.0"?>
+  const data =
+    `<?xml version="1.0"?>
     <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
       <s:Body>
         <u:X_SendIRCC xmlns:u="urn:schemas-sony-com:service:IRCC:1">
@@ -118,120 +119,120 @@ function sendCode(code) {
 // --------------------------------------------------------------------------------
 // Maps each command to  IRCC code.  Use COMMAND_MAP[command] to access.
 const COMMAND_MAP = {};
-COMMAND_MAP['Num1']='AAAAAQAAAAEAAAAAAw=='
-COMMAND_MAP['Num2']='AAAAAQAAAAEAAAABAw=='
-COMMAND_MAP['Num3']='AAAAAQAAAAEAAAACAw=='
-COMMAND_MAP['Num4']='AAAAAQAAAAEAAAADAw=='
-COMMAND_MAP['Num5']='AAAAAQAAAAEAAAAEAw=='
-COMMAND_MAP['Num6']='AAAAAQAAAAEAAAAFAw=='
-COMMAND_MAP['Num7']='AAAAAQAAAAEAAAAGAw=='
-COMMAND_MAP['Num8']='AAAAAQAAAAEAAAAHAw=='
-COMMAND_MAP['Num9']='AAAAAQAAAAEAAAAIAw=='
-COMMAND_MAP['Num0']='AAAAAQAAAAEAAAAJAw=='
-COMMAND_MAP['Num11']='AAAAAQAAAAEAAAAKAw=='
-COMMAND_MAP['Num12']='AAAAAQAAAAEAAAALAw=='
-COMMAND_MAP['Enter']='AAAAAQAAAAEAAAALAw=='
-COMMAND_MAP['GGuide']='AAAAAQAAAAEAAAAOAw=='
-COMMAND_MAP['ChannelUp']='AAAAAQAAAAEAAAAQAw=='
-COMMAND_MAP['ChannelDown']='AAAAAQAAAAEAAAARAw=='
-COMMAND_MAP['VolumeUp']='AAAAAQAAAAEAAAASAw=='
-COMMAND_MAP['VolumeDown']='AAAAAQAAAAEAAAATAw=='
-COMMAND_MAP['Mute']='AAAAAQAAAAEAAAAUAw=='
-COMMAND_MAP['TvPower']='AAAAAQAAAAEAAAAVAw=='
-COMMAND_MAP['Audio']='AAAAAQAAAAEAAAAXAw=='
-COMMAND_MAP['MediaAudioTrack']='AAAAAQAAAAEAAAAXAw=='
-COMMAND_MAP['Tv']='AAAAAQAAAAEAAAAkAw=='
-COMMAND_MAP['Input']='AAAAAQAAAAEAAAAlAw=='
-COMMAND_MAP['TvInput']='AAAAAQAAAAEAAAAlAw=='
-COMMAND_MAP['TvAntennaCable']='AAAAAQAAAAEAAAAqAw=='
-COMMAND_MAP['WakeUp']='AAAAAQAAAAEAAAAuAw=='
-COMMAND_MAP['PowerOff']='AAAAAQAAAAEAAAAvAw=='
-COMMAND_MAP['Sleep']='AAAAAQAAAAEAAAAvAw=='
-COMMAND_MAP['Right']='AAAAAQAAAAEAAAAzAw=='
-COMMAND_MAP['Left']='AAAAAQAAAAEAAAA0Aw=='
-COMMAND_MAP['SleepTimer']='AAAAAQAAAAEAAAA2Aw=='
-COMMAND_MAP['Analog2']='AAAAAQAAAAEAAAA4Aw=='
-COMMAND_MAP['TvAnalog']='AAAAAQAAAAEAAAA4Aw=='
-COMMAND_MAP['Display']='AAAAAQAAAAEAAAA6Aw=='
-COMMAND_MAP['Jump']='AAAAAQAAAAEAAAA7Aw=='
-COMMAND_MAP['PicOff']='AAAAAQAAAAEAAAA+Aw=='
-COMMAND_MAP['PictureOff']='AAAAAQAAAAEAAAA+Aw=='
-COMMAND_MAP['Teletext']='AAAAAQAAAAEAAAA/Aw=='
-COMMAND_MAP['Video1']='AAAAAQAAAAEAAABAAw=='
-COMMAND_MAP['Video2']='AAAAAQAAAAEAAABBAw=='
-COMMAND_MAP['AnalogRgb1']='AAAAAQAAAAEAAABDAw=='
-COMMAND_MAP['Home']='AAAAAQAAAAEAAABgAw=='
-COMMAND_MAP['Exit']='AAAAAQAAAAEAAABjAw=='
-COMMAND_MAP['PictureMode']='AAAAAQAAAAEAAABkAw=='
-COMMAND_MAP['Confirm']='AAAAAQAAAAEAAABlAw=='
-COMMAND_MAP['Up']='AAAAAQAAAAEAAAB0Aw=='
-COMMAND_MAP['Down']='AAAAAQAAAAEAAAB1Aw=='
-COMMAND_MAP['ClosedCaption']='AAAAAgAAAKQAAAAQAw=='
-COMMAND_MAP['Component1']='AAAAAgAAAKQAAAA2Aw=='
-COMMAND_MAP['Component2']='AAAAAgAAAKQAAAA3Aw=='
-COMMAND_MAP['Wide']='AAAAAgAAAKQAAAA9Aw=='
-COMMAND_MAP['EPG']='AAAAAgAAAKQAAABbAw=='
-COMMAND_MAP['PAP']='AAAAAgAAAKQAAAB3Aw=='
-COMMAND_MAP['TenKey']='AAAAAgAAAJcAAAAMAw=='
-COMMAND_MAP['BSCS']='AAAAAgAAAJcAAAAQAw=='
-COMMAND_MAP['Ddata']='AAAAAgAAAJcAAAAVAw=='
-COMMAND_MAP['Stop']='AAAAAgAAAJcAAAAYAw=='
-COMMAND_MAP['Pause']='AAAAAgAAAJcAAAAZAw=='
-COMMAND_MAP['Play']='AAAAAgAAAJcAAAAaAw=='
-COMMAND_MAP['Rewind']='AAAAAgAAAJcAAAAbAw=='
-COMMAND_MAP['Forward']='AAAAAgAAAJcAAAAcAw=='
-COMMAND_MAP['DOT']='AAAAAgAAAJcAAAAdAw=='
-COMMAND_MAP['Rec']='AAAAAgAAAJcAAAAgAw=='
-COMMAND_MAP['Return']='AAAAAgAAAJcAAAAjAw=='
-COMMAND_MAP['Blue']='AAAAAgAAAJcAAAAkAw=='
-COMMAND_MAP['Red']='AAAAAgAAAJcAAAAlAw=='
-COMMAND_MAP['Green']='AAAAAgAAAJcAAAAmAw=='
-COMMAND_MAP['Yellow']='AAAAAgAAAJcAAAAnAw=='
-COMMAND_MAP['SubTitle']='AAAAAgAAAJcAAAAoAw=='
-COMMAND_MAP['CS']='AAAAAgAAAJcAAAArAw=='
-COMMAND_MAP['BS']='AAAAAgAAAJcAAAAsAw=='
-COMMAND_MAP['Digital']='AAAAAgAAAJcAAAAyAw=='
-COMMAND_MAP['Options']='AAAAAgAAAJcAAAA2Aw=='
-COMMAND_MAP['Media']='AAAAAgAAAJcAAAA4Aw=='
-COMMAND_MAP['Prev']='AAAAAgAAAJcAAAA8Aw=='
-COMMAND_MAP['Next']='AAAAAgAAAJcAAAA9Aw=='
-COMMAND_MAP['DpadCenter']='AAAAAgAAAJcAAABKAw=='
-COMMAND_MAP['CursorUp']='AAAAAgAAAJcAAABPAw=='
-COMMAND_MAP['CursorDown']='AAAAAgAAAJcAAABQAw=='
-COMMAND_MAP['CursorLeft']='AAAAAgAAAJcAAABNAw=='
-COMMAND_MAP['CursorRight']='AAAAAgAAAJcAAABOAw=='
-COMMAND_MAP['ShopRemoteControlForcedDynamic']='AAAAAgAAAJcAAABqAw=='
-COMMAND_MAP['FlashPlus']='AAAAAgAAAJcAAAB4Aw=='
-COMMAND_MAP['FlashMinus']='AAAAAgAAAJcAAAB5Aw=='
-COMMAND_MAP['AudioQualityMode']='AAAAAgAAAJcAAAB7Aw=='
-COMMAND_MAP['DemoMode']='AAAAAgAAAJcAAAB8Aw=='
-COMMAND_MAP['Analog']='AAAAAgAAAHcAAAANAw=='
-COMMAND_MAP['Mode3D']='AAAAAgAAAHcAAABNAw=='
-COMMAND_MAP['DigitalToggle']='AAAAAgAAAHcAAABSAw=='
-COMMAND_MAP['DemoSurround']='AAAAAgAAAHcAAAB7Aw=='
-COMMAND_MAP['*AD']='AAAAAgAAABoAAAA7Aw=='
-COMMAND_MAP['AudioMixUp']='AAAAAgAAABoAAAA8Aw=='
-COMMAND_MAP['AudioMixDown']='AAAAAgAAABoAAAA9Aw=='
-COMMAND_MAP['PhotoFrame']='AAAAAgAAABoAAABVAw=='
-COMMAND_MAP['Tv_Radio']='AAAAAgAAABoAAABXAw=='
-COMMAND_MAP['SyncMenu']='AAAAAgAAABoAAABYAw=='
-COMMAND_MAP['Hdmi1']='AAAAAgAAABoAAABaAw=='
-COMMAND_MAP['Hdmi2']='AAAAAgAAABoAAABbAw=='
-COMMAND_MAP['Hdmi3']='AAAAAgAAABoAAABcAw=='
-COMMAND_MAP['Hdmi4']='AAAAAgAAABoAAABdAw=='
-COMMAND_MAP['TopMenu']='AAAAAgAAABoAAABgAw=='
-COMMAND_MAP['PopUpMenu']='AAAAAgAAABoAAABhAw=='
-COMMAND_MAP['OneTouchTimeRec']='AAAAAgAAABoAAABkAw=='
-COMMAND_MAP['OneTouchView']='AAAAAgAAABoAAABlAw=='
-COMMAND_MAP['DUX']='AAAAAgAAABoAAABzAw=='
-COMMAND_MAP['FootballMode']='AAAAAgAAABoAAAB2Aw=='
-COMMAND_MAP['iManual']='AAAAAgAAABoAAAB7Aw=='
-COMMAND_MAP['Netflix']='AAAAAgAAABoAAAB8Aw=='
-COMMAND_MAP['Assists']='AAAAAgAAAMQAAAA7Aw=='
-COMMAND_MAP['ActionMenu']='AAAAAgAAAMQAAABLAw=='
-COMMAND_MAP['Help']='AAAAAgAAAMQAAABNAw=='
-COMMAND_MAP['TvSatellite']='AAAAAgAAAMQAAABOAw=='
-COMMAND_MAP['WirelessSubwoofer']='AAAAAgAAAMQAAAB+Aw=='
+COMMAND_MAP['Num1'] = 'AAAAAQAAAAEAAAAAAw==';
+COMMAND_MAP['Num2'] = 'AAAAAQAAAAEAAAABAw==';
+COMMAND_MAP['Num3'] = 'AAAAAQAAAAEAAAACAw==';
+COMMAND_MAP['Num4'] = 'AAAAAQAAAAEAAAADAw==';
+COMMAND_MAP['Num5'] = 'AAAAAQAAAAEAAAAEAw==';
+COMMAND_MAP['Num6'] = 'AAAAAQAAAAEAAAAFAw==';
+COMMAND_MAP['Num7'] = 'AAAAAQAAAAEAAAAGAw==';
+COMMAND_MAP['Num8'] = 'AAAAAQAAAAEAAAAHAw==';
+COMMAND_MAP['Num9'] = 'AAAAAQAAAAEAAAAIAw==';
+COMMAND_MAP['Num0'] = 'AAAAAQAAAAEAAAAJAw==';
+COMMAND_MAP['Num11'] = 'AAAAAQAAAAEAAAAKAw==';
+COMMAND_MAP['Num12'] = 'AAAAAQAAAAEAAAALAw==';
+COMMAND_MAP['Enter'] = 'AAAAAQAAAAEAAAALAw==';
+COMMAND_MAP['GGuide'] = 'AAAAAQAAAAEAAAAOAw==';
+COMMAND_MAP['ChannelUp'] = 'AAAAAQAAAAEAAAAQAw==';
+COMMAND_MAP['ChannelDown'] = 'AAAAAQAAAAEAAAARAw==';
+COMMAND_MAP['VolumeUp'] = 'AAAAAQAAAAEAAAASAw==';
+COMMAND_MAP['VolumeDown'] = 'AAAAAQAAAAEAAAATAw==';
+COMMAND_MAP['Mute'] = 'AAAAAQAAAAEAAAAUAw==';
+COMMAND_MAP['TvPower'] = 'AAAAAQAAAAEAAAAVAw==';
+COMMAND_MAP['Audio'] = 'AAAAAQAAAAEAAAAXAw==';
+COMMAND_MAP['MediaAudioTrack'] = 'AAAAAQAAAAEAAAAXAw==';
+COMMAND_MAP['Tv'] = 'AAAAAQAAAAEAAAAkAw==';
+COMMAND_MAP['Input'] = 'AAAAAQAAAAEAAAAlAw==';
+COMMAND_MAP['TvInput'] = 'AAAAAQAAAAEAAAAlAw==';
+COMMAND_MAP['TvAntennaCable'] = 'AAAAAQAAAAEAAAAqAw==';
+COMMAND_MAP['WakeUp'] = 'AAAAAQAAAAEAAAAuAw==';
+COMMAND_MAP['PowerOff'] = 'AAAAAQAAAAEAAAAvAw==';
+COMMAND_MAP['Sleep'] = 'AAAAAQAAAAEAAAAvAw==';
+COMMAND_MAP['Right'] = 'AAAAAQAAAAEAAAAzAw==';
+COMMAND_MAP['Left'] = 'AAAAAQAAAAEAAAA0Aw==';
+COMMAND_MAP['SleepTimer'] = 'AAAAAQAAAAEAAAA2Aw==';
+COMMAND_MAP['Analog2'] = 'AAAAAQAAAAEAAAA4Aw==';
+COMMAND_MAP['TvAnalog'] = 'AAAAAQAAAAEAAAA4Aw==';
+COMMAND_MAP['Display'] = 'AAAAAQAAAAEAAAA6Aw==';
+COMMAND_MAP['Jump'] = 'AAAAAQAAAAEAAAA7Aw==';
+COMMAND_MAP['PicOff'] = 'AAAAAQAAAAEAAAA+Aw==';
+COMMAND_MAP['PictureOff'] = 'AAAAAQAAAAEAAAA+Aw==';
+COMMAND_MAP['Teletext'] = 'AAAAAQAAAAEAAAA/Aw==';
+COMMAND_MAP['Video1'] = 'AAAAAQAAAAEAAABAAw==';
+COMMAND_MAP['Video2'] = 'AAAAAQAAAAEAAABBAw==';
+COMMAND_MAP['AnalogRgb1'] = 'AAAAAQAAAAEAAABDAw==';
+COMMAND_MAP['Home'] = 'AAAAAQAAAAEAAABgAw==';
+COMMAND_MAP['Exit'] = 'AAAAAQAAAAEAAABjAw==';
+COMMAND_MAP['PictureMode'] = 'AAAAAQAAAAEAAABkAw==';
+COMMAND_MAP['Confirm'] = 'AAAAAQAAAAEAAABlAw==';
+COMMAND_MAP['Up'] = 'AAAAAQAAAAEAAAB0Aw==';
+COMMAND_MAP['Down'] = 'AAAAAQAAAAEAAAB1Aw==';
+COMMAND_MAP['ClosedCaption'] = 'AAAAAgAAAKQAAAAQAw==';
+COMMAND_MAP['Component1'] = 'AAAAAgAAAKQAAAA2Aw==';
+COMMAND_MAP['Component2'] = 'AAAAAgAAAKQAAAA3Aw==';
+COMMAND_MAP['Wide'] = 'AAAAAgAAAKQAAAA9Aw==';
+COMMAND_MAP['EPG'] = 'AAAAAgAAAKQAAABbAw==';
+COMMAND_MAP['PAP'] = 'AAAAAgAAAKQAAAB3Aw==';
+COMMAND_MAP['TenKey'] = 'AAAAAgAAAJcAAAAMAw==';
+COMMAND_MAP['BSCS'] = 'AAAAAgAAAJcAAAAQAw==';
+COMMAND_MAP['Ddata'] = 'AAAAAgAAAJcAAAAVAw==';
+COMMAND_MAP['Stop'] = 'AAAAAgAAAJcAAAAYAw==';
+COMMAND_MAP['Pause'] = 'AAAAAgAAAJcAAAAZAw==';
+COMMAND_MAP['Play'] = 'AAAAAgAAAJcAAAAaAw==';
+COMMAND_MAP['Rewind'] = 'AAAAAgAAAJcAAAAbAw==';
+COMMAND_MAP['Forward'] = 'AAAAAgAAAJcAAAAcAw==';
+COMMAND_MAP['DOT'] = 'AAAAAgAAAJcAAAAdAw==';
+COMMAND_MAP['Rec'] = 'AAAAAgAAAJcAAAAgAw==';
+COMMAND_MAP['Return'] = 'AAAAAgAAAJcAAAAjAw==';
+COMMAND_MAP['Blue'] = 'AAAAAgAAAJcAAAAkAw==';
+COMMAND_MAP['Red'] = 'AAAAAgAAAJcAAAAlAw==';
+COMMAND_MAP['Green'] = 'AAAAAgAAAJcAAAAmAw==';
+COMMAND_MAP['Yellow'] = 'AAAAAgAAAJcAAAAnAw==';
+COMMAND_MAP['SubTitle'] = 'AAAAAgAAAJcAAAAoAw==';
+COMMAND_MAP['CS'] = 'AAAAAgAAAJcAAAArAw==';
+COMMAND_MAP['BS'] = 'AAAAAgAAAJcAAAAsAw==';
+COMMAND_MAP['Digital'] = 'AAAAAgAAAJcAAAAyAw==';
+COMMAND_MAP['Options'] = 'AAAAAgAAAJcAAAA2Aw==';
+COMMAND_MAP['Media'] = 'AAAAAgAAAJcAAAA4Aw==';
+COMMAND_MAP['Prev'] = 'AAAAAgAAAJcAAAA8Aw==';
+COMMAND_MAP['Next'] = 'AAAAAgAAAJcAAAA9Aw==';
+COMMAND_MAP['DpadCenter'] = 'AAAAAgAAAJcAAABKAw==';
+COMMAND_MAP['CursorUp'] = 'AAAAAgAAAJcAAABPAw==';
+COMMAND_MAP['CursorDown'] = 'AAAAAgAAAJcAAABQAw==';
+COMMAND_MAP['CursorLeft'] = 'AAAAAgAAAJcAAABNAw==';
+COMMAND_MAP['CursorRight'] = 'AAAAAgAAAJcAAABOAw==';
+COMMAND_MAP['ShopRemoteControlForcedDynamic'] = 'AAAAAgAAAJcAAABqAw==';
+COMMAND_MAP['FlashPlus'] = 'AAAAAgAAAJcAAAB4Aw==';
+COMMAND_MAP['FlashMinus'] = 'AAAAAgAAAJcAAAB5Aw==';
+COMMAND_MAP['AudioQualityMode'] = 'AAAAAgAAAJcAAAB7Aw==';
+COMMAND_MAP['DemoMode'] = 'AAAAAgAAAJcAAAB8Aw==';
+COMMAND_MAP['Analog'] = 'AAAAAgAAAHcAAAANAw==';
+COMMAND_MAP['Mode3D'] = 'AAAAAgAAAHcAAABNAw==';
+COMMAND_MAP['DigitalToggle'] = 'AAAAAgAAAHcAAABSAw==';
+COMMAND_MAP['DemoSurround'] = 'AAAAAgAAAHcAAAB7Aw==';
+COMMAND_MAP['*AD'] = 'AAAAAgAAABoAAAA7Aw==';
+COMMAND_MAP['AudioMixUp'] = 'AAAAAgAAABoAAAA8Aw==';
+COMMAND_MAP['AudioMixDown'] = 'AAAAAgAAABoAAAA9Aw==';
+COMMAND_MAP['PhotoFrame'] = 'AAAAAgAAABoAAABVAw==';
+COMMAND_MAP['Tv_Radio'] = 'AAAAAgAAABoAAABXAw==';
+COMMAND_MAP['SyncMenu'] = 'AAAAAgAAABoAAABYAw==';
+COMMAND_MAP['Hdmi1'] = 'AAAAAgAAABoAAABaAw==';
+COMMAND_MAP['Hdmi2'] = 'AAAAAgAAABoAAABbAw==';
+COMMAND_MAP['Hdmi3'] = 'AAAAAgAAABoAAABcAw==';
+COMMAND_MAP['Hdmi4'] = 'AAAAAgAAABoAAABdAw==';
+COMMAND_MAP['TopMenu'] = 'AAAAAgAAABoAAABgAw==';
+COMMAND_MAP['PopUpMenu'] = 'AAAAAgAAABoAAABhAw==';
+COMMAND_MAP['OneTouchTimeRec'] = 'AAAAAgAAABoAAABkAw==';
+COMMAND_MAP['OneTouchView'] = 'AAAAAgAAABoAAABlAw==';
+COMMAND_MAP['DUX'] = 'AAAAAgAAABoAAABzAw==';
+COMMAND_MAP['FootballMode'] = 'AAAAAgAAABoAAAB2Aw==';
+COMMAND_MAP['iManual'] = 'AAAAAgAAABoAAAB7Aw==';
+COMMAND_MAP['Netflix'] = 'AAAAAgAAABoAAAB8Aw==';
+COMMAND_MAP['Assists'] = 'AAAAAgAAAMQAAAA7Aw==';
+COMMAND_MAP['ActionMenu'] = 'AAAAAgAAAMQAAABLAw==';
+COMMAND_MAP['Help'] = 'AAAAAgAAAMQAAABNAw==';
+COMMAND_MAP['TvSatellite'] = 'AAAAAgAAAMQAAABOAw==';
+COMMAND_MAP['WirelessSubwoofer'] = 'AAAAAgAAAMQAAAB+Aw==';
 
 function commandToCode(command) {
   // Return the IRCC code correspond to command. Returns undefined on failure.
@@ -291,7 +292,7 @@ function handleClick(e) {
   for (let bCommand of buttonCommands) {
     // bCommand may be a single TV command or a channel number
     const channelCommands = channelToCommands(bCommand);
-    const commands = channelCommands || [ bCommand ];
+    const commands = channelCommands || [bCommand];
 
     for (let command of commands) {
       const code = commandToCode(command);
@@ -313,9 +314,9 @@ function handleClick(e) {
 }
 
 // --------------------------------------------------------------------------------
-  // Connect all buttons to the command click handler.
-  // This is not necessary, here just in case web page has buttons
-  // and createChannelsButtons is never called.
+// Connect all buttons to the command click handler.
+// This is not necessary, here just in case web page has buttons
+// and createChannelsButtons is never called.
 function setupButtonsOnClick() {
   const buttons = document.getElementsByClassName(CLASS_TV_COMMAND);
   for (let button of buttons) {
@@ -324,13 +325,13 @@ function setupButtonsOnClick() {
 }
 
 // Create DOM button elements for the quick access channel numbers 
-function createChannelButtons(channelsString ) {
+function createChannelButtons(channelsString) {
   if (!channelsString) {
     console.log('Skipping channel buttons creation - string is empty');
     return;
   }
   const channels = channelsString.split(WHITESPACE_RE);
-  const oldChannelsDiv = document.getElementById(ID_CHANNEL_NUMBERS); 
+  const oldChannelsDiv = document.getElementById(ID_CHANNEL_NUMBERS);
 
   // remove existing channel buttons - child nodes of oldChannelsDiv
   const newParentDiv = oldChannelsDiv.cloneNode(false);
@@ -349,10 +350,10 @@ function createChannelButtons(channelsString ) {
       </div>
       ...
     */
-    const newDiv = document.createElement('div'); 
+    const newDiv = document.createElement('div');
     newDiv.setAttribute('class', 'row-item');
 
-    const newButton = document.createElement('button'); 
+    const newButton = document.createElement('button');
     newButton.appendChild(document.createTextNode(channel));
     newButton.setAttribute('class', 'tv-command');
     newButton.setAttribute('type', 'button');
@@ -371,7 +372,7 @@ function createChannelButtons(channelsString ) {
 // --------------------------------------------------------------------------------
 /* Web page onLoad init function. Attach listeners */
 
-function onLoadFunction () {
+function onLoadFunction() {
 
   // TV Setup load and save. Loads IP address/key from local storage,
   // and creates all remote control buttons and sets up their onclick handler.
@@ -423,8 +424,8 @@ function saveTVSetup(e) {
 function restoreTVSetup() {
   SONY_TV_IP = localStorage.getItem(STORE_TV_IP);
   SONY_TV_PRESHARED_KEY = localStorage.getItem(STORE_TV_KEY);
-  const channelsString = localStorage.getItem(STORE_CHANNEL_BUTTONS)
-    || MAKE_CHANNEL_BUTTONS;
+  const channelsString = localStorage.getItem(STORE_CHANNEL_BUTTONS) ||
+    MAKE_CHANNEL_BUTTONS;
 
   document.getElementById(ID_TV_IP).value = SONY_TV_IP;
   document.getElementById(ID_TV_KEY).value = SONY_TV_PRESHARED_KEY;
@@ -437,10 +438,10 @@ function restoreTVSetup() {
 // Tabs support
 function openTab(tabLink) {
   for (let e of document.getElementsByClassName(CLASS_TAB_CONTENT)) {
-    e.style.display = 'none'; 
+    e.style.display = 'none';
   }
   const activeTab = document.getElementById(tabLink.id.replace('-link', '-content'));
-  activeTab.style.display = 'block'; 
+  activeTab.style.display = 'block';
   const replaceClass = ' ' + CSS_TAB_LINK_ACTIVE;
   for (let e of document.getElementsByClassName(CLASS_TAB_LINK)) {
     e.className = e.className.replace(replaceClass, '');
