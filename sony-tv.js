@@ -434,6 +434,15 @@ function onLoadFunction() {
      getRemoteControllerInfo(controllerOutput);
     }
   }
+
+  // Help page has a version field, fill it in.
+  if (typeof browser != 'undefined') {
+    // Only do this if we are running as an extension, and not loading
+    // this script on its own (for local web display testing, for example).
+    const manifest = browser.runtime.getManifest();
+    const element = document.getElementById('about-version');
+    element.textContent = manifest.version;
+  }
 }
 
 // Save and restore setup options.
