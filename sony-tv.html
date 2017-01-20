@@ -168,7 +168,7 @@
       <h3>Code Changes</h3>
       <p>The extension as shipped should be usable by most everyone, since it also allows for custom set of channel buttons.
         <br> But if additional buttons are needed, the code can be edited locally.
-        <br> The web page can be edited as needed by downloading the entire web extension <a href="https://github.com/avinash311/sony-tv-remote">source code</a>        locally.
+        <br> The web page can be edited as needed by downloading the entire web extension <a href="https://github.com/avinash311/sony-tv-remote">source code</a> locally.
         <br> The extension can then be loaded from the local directory.
         <br> When making such edits, make sure to enter the TV IP and Key into the variables otherwise you will have to enter
         setup each time you restart your browser, since the extension has to reloaded on each restart.
@@ -176,6 +176,15 @@
         [Load Temporary Add-on] button and select any file in the folder where this extension is stored.
         <br>In Chrome, visit [More Tools] [Extensions] and use the [Local unpacked extension...] command.
         <br>(<em>This has only been tested on Firefox</em>.)</p>
+      <h3>TV Info (Commands)</h3>
+      <p>Here's a way to see all the IRCC codes supported by the TV. There is usually no need to do
+        this since it seems all Sony Bravia TVs return the same set of codes. This can be used to
+        confirm it, if needed by comparing this output to the COMMAND_MAP Javascript variable in the
+        code.
+        <div id="controller-info">
+          <button type="button" id="controller-info-button">Get TV Remote Controller Info</button>
+          <div id="controller-info-output">(Remote Controller Info will show up here.)</div>
+        </div></p>
       <h2>About</h2>
       <p>About: Sony TV Remote Web Extension. Version: <span class="about-version"></span> </p>
       <p><a href="http://www.aczoom.com/tech/sony-tv-remote/">aczoom.com/tech/sony-tv-remote/</a> </p>

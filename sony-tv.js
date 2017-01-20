@@ -68,11 +68,10 @@ function sendCode(code) {
   }
   const req = new XMLHttpRequest();
   const tv_url = SONY_TV_URL_PREFIX + SONY_TV_IP + SONY_TV_URL_SUFFIX;
-  // Making a async xmlhttprequest, this seems to work fine even when sending
-  // a list of commands, one after the other. If this turns out to cause
-  // problems at the TV receiving too many codes, would be fine to change
-  // this to a synchronous call and use a WebWorker thread to send
-  // lists of codes.
+  // Making a async xmlhttprequest, this will not always work when sending
+  // a list of commands, one after the other. So we add a delay between
+  // codes. It would be fine to change this to a synchronous call and use
+  // a WebWorker thread to send lists of codes.
   req.open('POST', tv_url, true);
 
   req.onreadystatechange = function() {
@@ -114,6 +113,37 @@ function sendCode(code) {
   // Note: do not escape(data), that results in UPnPError:
   //      <errorCode>401</errorCode>
   //      <errorDescription>Invalid Action</errorDescription>
+}
+
+// --------------------------------------------------------------------------------
+// Get the list of commands supported by the TV. This only needs the URL,
+// no need to send the TV Pre-Shared Key. Send this as a JSON command.
+// curl --silent -XPOST http://$SonyBraviaIP/sony/system -d '{"method":"getRemoteControllerInfo","params":[],"id":10,"version":"1.0"}'  | python -m json.tool
+function getRemoteControllerInfo(controllerOutputDiv) {
+  if (SONY_TV_IP == '') {
+    console.error('Error: No Sony TV IP setup yet.');
+    return;
+  }
+  const req = new XMLHttpRequest();
+  const tv_url = SONY_TV_URL_PREFIX + SONY_TV_IP + '/sony/system' ;
+  req.open('POST', tv_url, true);
+  req.setRequestHeader('Content-Type', 'text/xml; charset=UTF-8');
+  req.timeout = 3000; // in milliseconds
+
+  req.onreadystatechange = function() {
+    if (req.readyState == 4) { // XMLHttpRequest.DONE
+      if (req.status === 200) {
+        controllerOutputDiv.textContent = req.responseText;
+      } else {
+        console.warn('Failed: Got status from req: ', req.status);
+        console.warn('Failed: Got responseText from req: ', req.responseText);
+      }
+    }
+  }
+
+  const data = '{"method":"getRemoteControllerInfo","params":[],"id":10,"version":"1.0"}';
+  req.send(data);
+  console.log('Sent getRemoteControllerInfo POST');
 }
 
 // --------------------------------------------------------------------------------
@@ -396,6 +426,14 @@ function onLoadFunction() {
     openTab(document.getElementById('tab-buttons-link'));
   }
 
+  // Help page has a button to query TV for list of IRCC codes it knows about
+  const controller = document.getElementById('controller-info-button');
+  if (controller) {
+    const controllerOutput = document.getElementById('controller-info-output');
+    controller.onclick = () => {
+     getRemoteControllerInfo(controllerOutput);
+    }
+  }
 }
 
 // Save and restore setup options.

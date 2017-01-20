@@ -125,3 +125,9 @@ ul.tabs-navigation {
 .tabs-navigation li a:hover {
   background-color: #292;
 }
+
+/* GetRemoteControllerInfo command and output */
+#controller-info {
+  padding: 10px 20px;
+  border: 1px solid black;
+}
