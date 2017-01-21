@@ -4,7 +4,6 @@
  */
 
 .columns {
-  margin: 0.5em 20px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -30,13 +29,11 @@ label textarea {
 
 body {
   background: #ECECEC;
-  margin: 0px auto;
+  margin: 20px 5px;
   color: #333;
 }
 
 button {
-  margin: 0.5em 0;
-  padding: 0.5em;
   /* this also helps on narrow width displays when the buttons are stacked */
   display: inline-block;
   font-size: 1.0em;
@@ -62,7 +59,6 @@ button:hover {
   font-size: 1.1em;
   font-weight: bold;
   text-decoration: none;
-  margin: 0.5em 0;
   /* this also helps on narrow width displays when the buttons are stacked */
   width: 6em; /* default width */
   background: #aac; /* For browsers that do not support gradients */

@@ -59,12 +59,13 @@ const CLASS_TV_COMMAND = 'tv-command';
 const ID_TV_SETUP = 'tv-setup'; // form ID to save TV IP and Key
 const ID_TV_IP = 'tv-ip-address'; // ID of field that shows/updates TV IP
 const ID_TV_KEY = 'tv-key'; // ID of field that shows/updates TV Pre-Shared Key
-const ID_MAKE_CHANNEL_BUTTONS = 'make-channel-buttons'; // channel numbers
+const ID_MAKE_CUSTOM_BUTTONS = 'make-custom-buttons'; // channel numbers
 const ID_CHANNEL_NUMBERS = 'tv-channel-numbers'; // displays channel buttons
 const ID_POPUP_TEXT = 'popup-text'; // normally hidden div to display messages
 const CLASS_TAB_CONTENT = 'tab-content'; // each tab content div (buttons, etc)
 const CLASS_TAB_LINK = 'tab-link'; // navigation bar for the tabs
 const CSS_TAB_LINK_ACTIVE = 'tab-color-active'; // css of active tab link
+const DATASET_COMMANDS = 'stv.commands'; // HTML attribute: data-stv.commands
 
 // key names used to store data in (local storage or browser.storage)
 const STORE_TV_IP = 'SonyTVIP';
@@ -343,13 +344,13 @@ function channelToCommands(number) {
 // While each button usually has a single command, it can be a sequence of
 // commands separated by space. Commands may be TV commands or channel numbers.
 function buttonToCommands(button) {
-  // HTML attribute: data-stv:commands="command [command ...]"
-  const buttonCommand = button.dataset['stv:commands'];
+  // HTML attribute: data-stv.commands="command [command ...]"
+  const buttonCommand = button.dataset[DATASET_COMMANDS];
   return buttonCommand.split(WHITESPACE_RE);
 }
 
 // Button click listener that executes the remote command or commands
-// this object here is a DOM object with dataset['stv:commands']
+// this object here is a DOM object with dataset[DATASET_COMMANDS]
 function handleClick(e) {
   e.preventDefault();
   // command may be one or more commands (keys of the COMMAND_MAP) separated by space
@@ -412,15 +413,14 @@ function createChannelButtons(commandsString) {
   // add all the new channels
   for (let commandAndName of commands) {
     const commandAndNameV = commandAndName.split(COMMAND_AND_NAME_RE);
-    if (!commandAndNameV) continue;
-    const command = commandAndNameV[0];
+    const command = commandAndNameV[0].trim();
     if (!command) continue;
-    const name = commandAndNameV[1] || command;
+    const name = (commandAndNameV.length > 1 ? commandAndNameV[1].trim() : command);
 
     /* Example div to create for channel 2.1:
     <div class="columns" id="tv-channel-numbers">
       <div class="one-fourth-item">
-        <button type="button" class="tv-command" data-stv:commands="2.1">2.1</button>
+        <button type="button" class="tv-command" data-stv.commands="2.1">2.1</button>
       </div>
       ...
     */
@@ -431,7 +431,7 @@ function createChannelButtons(commandsString) {
     newButton.appendChild(document.createTextNode(name));
     newButton.setAttribute('class', 'tv-command');
     newButton.setAttribute('type', 'button');
-    newButton.setAttribute('data-stv:commands', command);
+    newButton.setAttribute('data-' + DATASET_COMMANDS, command);
     newItem.appendChild(newButton);
 
     // add the newly created row element and its content into the DOM 
@@ -505,7 +505,7 @@ function saveTVSetup(e) {
   } else {
     localStorage.setItem(STORE_TV_IP, IP);
     localStorage.setItem(STORE_TV_KEY, key);
-    const channelsString = document.getElementById(ID_MAKE_CHANNEL_BUTTONS).value;
+    const channelsString = document.getElementById(ID_MAKE_CUSTOM_BUTTONS).value;
     localStorage.setItem(STORE_CHANNEL_BUTTONS, channelsString);
   }
 
@@ -525,7 +525,7 @@ function restoreTVSetup() {
 
   document.getElementById(ID_TV_IP).value = SONY_TV_IP;
   document.getElementById(ID_TV_KEY).value = SONY_TV_PRESHARED_KEY;
-  document.getElementById(ID_MAKE_CHANNEL_BUTTONS).value = channelsString;
+  document.getElementById(ID_MAKE_CUSTOM_BUTTONS).value = channelsString;
 
   // Create page elements - quick access channel buttons
   createChannelButtons(channelsString);

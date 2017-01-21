@@ -13,14 +13,6 @@
 
 <body>
   <h1>Sony TV Remote</h1>
-  <ul class="tabs-navigation">
-    <!-- id of links must be same id as tab, with -link replaced by -content.
-         Ex: tab-buttons-link and tab-buttons-content -->
-    <li class="tab-link" id="tab-buttons-link"><a>Buttons</a> </li>
-    <li class="tab-link" id="tab-setup-link"><a>Setup</a> </li>
-    <li class="tab-link" id="tab-help-link"><a>Help</a> </li>
-  </ul>
-  <div class="popup-text" id="popup-text">This is normally hidden, shows popup message</div>
   <!-- =================================================================
      Sony TV Web Page Remote
      Uses Sony Bravia TV IRCC (IR like control commands) sent using HTTP POST.
@@ -46,35 +38,43 @@
 
      There are a number of similar tools available - from command line
      scripts to server side Javascript. Use a web search such as "Sony
-     TV IRCC" to find references. Example:
-     http://www.openremote.org/display/forums/Sony+TV+HTTP+control?focusedCommentId=23601972#comment-23601972
+     TV IRCC" to find references.
   ================================================================= -->
+  <ul class="tabs-navigation">
+    <!-- id of links must be same id as tab, with -link replaced by -content.
+         Ex: tab-buttons-link and tab-buttons-content -->
+    <li class="tab-link" id="tab-buttons-link"><a>Buttons</a> </li>
+    <li class="tab-link" id="tab-setup-link"><a>Setup</a> </li>
+    <li class="tab-link" id="tab-help-link"><a>Help</a> </li>
+  </ul>
+  <!-- display error/status messages on a popup, usually centered on browser page using css -->
+  <div class="popup-text" id="popup-text">This is normally hidden, shows popup message</div>
   <hr>
   <div class="tabs-all-content">
     <div class="tab-content" id="tab-buttons-content">
       <!-- Volume -->
       <div class="columns" id="tv-volume">
         <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv:commands="VolumeUp">Volume Up <i>&#x25B2;</i> </button>
+          <button type="button" class="tv-command" data-stv.commands="VolumeUp">Volume Up <i>&#x25B2;</i> </button>
         </div>
         <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv:commands="VolumeDown">Volume Down <i>&#x25BC;</i> </button>
+          <button type="button" class="tv-command" data-stv.commands="VolumeDown">Volume Down <i>&#x25BC;</i> </button>
         </div>
         <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv:commands="Mute"><i>&#x1F50A;</i> Mute <i>&#x1F507;</i> </button>
+          <button type="button" class="tv-command" data-stv.commands="Mute"><i>&#x1F50A;</i> Mute <i>&#x1F507;</i> </button>
         </div>
       </div>
       <hr>
       <!-- Channels -->
       <div class="columns" id="tv-channels">
         <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv:commands="ChannelUp">Channel Up <i>&#x25B2;</i> </button>
+          <button type="button" class="tv-command" data-stv.commands="ChannelUp">Channel Up <i>&#x25B2;</i> </button>
         </div>
         <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv:commands="ChannelDown">Channel Down <i>&#x25BC;</i> </button>
+          <button type="button" class="tv-command" data-stv.commands="ChannelDown">Channel Down <i>&#x25BC;</i> </button>
         </div>
         <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv:commands="Jump">Previous <i>&#x21B6;</i> </button>
+          <button type="button" class="tv-command" data-stv.commands="Jump">Previous <i>&#x21B6;</i> </button>
         </div>
       </div>
       <hr>
@@ -82,19 +82,19 @@
       <!-- these child elements are dynamically created based on user setup options -->
       <div class="columns" id="tv-channel-numbers">
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv:commands="2.1">2.1</button>
+          <button type="button" class="tv-command" data-stv.commands="2.1">2.1</button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv:commands="7.1">7.1</button>
+          <button type="button" class="tv-command" data-stv.commands="7.1">7.1</button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv:commands="38.1">38.1</button>
+          <button type="button" class="tv-command" data-stv.commands="38.1">38.1</button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv:commands="72.1">72.1</button>
+          <button type="button" class="tv-command" data-stv.commands="72.1">72.1</button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv:commands="82.4">82.4</button>
+          <button type="button" class="tv-command" data-stv.commands="82.4">82.4</button>
         </div>
       </div>
       <hr>
@@ -102,19 +102,19 @@
       <div class="columns" id="tv-display-ratio">
         <!-- these won't work unless a long 0.5 sec or so delay is sent between Up/Down commands -->
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv:commands="Wide Up Up Up Return">Wide&nbsp;Zoom <i></i> </button>
+          <button type="button" class="tv-command" data-stv.commands="Wide Up Up Up Return">Wide&nbsp;Zoom <i></i> </button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv:commands="Wide Down Down Down Up Up Return">Normal<i></i> </button>
+          <button type="button" class="tv-command" data-stv.commands="Wide Down Down Down Up Up Return">Normal<i></i> </button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv:commands="Wide Up Return">Wide&nbsp;Zoom
+          <button type="button" class="tv-command" data-stv.commands="Wide Up Return">Wide&nbsp;Zoom
             <br>Normal <i>&#x21E1;</i>
             <br>Full <i>&#x21E1;</i>
             <br>Zoom <i>&#x21E1;</i> </button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv:commands="Wide Down Return">Wide&nbsp;Zoom
+          <button type="button" class="tv-command" data-stv.commands="Wide Down Return">Wide&nbsp;Zoom
             <br>Normal <i>&#x21E3;</i>
             <br>Full <i>&#x21E3;</i>
             <br>Zoom <i>&#x21E3;</i> </button>
@@ -124,17 +124,17 @@
       <!-- Power -->
       <div class="columns" id="tv-power">
         <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv:commands="TvPower">ON &middot; OFF <i></i> </button>
+          <button type="button" class="tv-command" data-stv.commands="TvPower">ON &middot; OFF <i></i> </button>
         </div>
         <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv:commands="PowerOff">OFF <i>&#x2B58;</i> </button>
+          <button type="button" class="tv-command" data-stv.commands="PowerOff">OFF <i>&#x2B58;</i> </button>
         </div>
       </div>
     </div>
     <!-- tab-buttons-content -->
     <!-- Setup -->
     <hr>
-    <div class="row tab-content" id="tab-setup-content">
+    <div class="tab-content" id="tab-setup-content">
       <h2>TV Setup</h2>
       <form id="tv-setup">
         <fieldset>
@@ -147,9 +147,9 @@
             <input type="text" id="tv-key" placeholder="Enter TV Pre-Shared Key"> </p>
           <hr>
           <p>
-            <label for="make-channel-buttons">Create buttons for these channels:
-              <textarea id="make-channel-buttons" rows="14"></textarea>
-            </label> </p>
+          <label for="make-custom-buttons">Create buttons for these commands/channels:
+            <textarea id="make-custom-buttons" rows="14"></textarea>
+          </label> </p>
           <hr>
           <button type="submit">Save</button>
         </fieldset>
@@ -159,11 +159,11 @@
     </div>
     <!-- Help and About -->
     <hr>
-    <div class="row tab-content" id="tab-help-content">
+    <div class="tab-content" id="tab-help-content">
       <h2>About</h2>
-      <p>Sony TV Web Remote Extension.
-      <br> Version: <span id="about-version">1.1</span> </p>
-      <p><a href="http://www.aczoom.com/tech/sony-tv-remote/">aczoom.com/tech/sony-tv-remote/</a> </p>
+      <h3>Sony TV Web Page Remote</h3>
+      <p> Version: <span id="about-version">1.1</span>
+      <br>Homepage: <a href="http://www.aczoom.com/tech/sony-tv-remote/">aczoom.com/tech/sony-tv-remote/</a> </p>
 
       <h2>Help</h2>
       <p>For details on how this works, the best choice is looking at the source code: <a href="https://github.com/avinash311/sony-tv-remote">Sony TV Web Page Remote source code</a>.</p>
@@ -177,24 +177,43 @@
         in your router.</p>
       <p>Enter the TV IP and Key in the Setup form on this page, and click Save.
         <br> Once that is done, the buttons on the page can be used to send commands.</p>
-      <p>Enter the list of over-the-air channels you want direct access to.
-        <br> This will create a button for each channel.</p>
+      <p>Enter the list of over-the-air channels or TV commands you want direct access to.
+        <br> This will create a button for each channel or command.
+        <br> Each button should be defined on a single line. Example format is </p> <pre>
+2.1 : PBS 2
+4.1 : CBS 4
+4.1 : CBS 4
+Netflix : Netflix
+...
+        </pre>
+        <p>Where the <code> : </code> (space colon space) separates the TV commands or channel
+        number from the button name.<br>
+        <br> This will create a button for each channel or command.</p>
       <p>The Javascript code prints out status and error messages to the Javascript Console.
+        Some messages will also be shown on the web page as a popup for a few seconds, such
+        as when the Setup Save button is clicked, or if there is an error sending the
+        remote control command when a button is clicked.
         <br> To see the messages, open up your browser's Developer Tools or similar to see the Console messages.
         <br> For example, in Firefox type Control-Shift-J or click on [Menu] [Developer] [Browser console] to open the Console
         and look at the JS (Javascript) Tab to see messages from this script.</p>
 
       <h3>Code Changes</h3>
       <p>The extension as shipped should be usable by most everyone, since it also allows for custom set of channel buttons.
-        <br> But if additional buttons are needed, the code can be edited locally.
-        <br> The web page can be edited as needed by downloading the entire web extension <a href="https://github.com/avinash311/sony-tv-remote">source code</a> locally.
-        <br> The extension can then be loaded from the local directory.
-        <br> When making such edits, make sure to enter the TV IP and Key into the variables otherwise you will have to enter
+        <br> But if additional buttons are needed or the setup needs to hardcoded, the code
+        can be edited locally.
+        <br><a href="https://github.com/avinash311/sony-tv-remote">Sony TV Web Page Remote source code</a>
+        Download source code and web page as a ZIP archive: <a href="https://github.com/avinash311/sony-tv-remote/archive/master.zip">sony-tv-remote/archive/master.zip</a>
+        <br> The web page or extension can then be loaded from the local directory.
+        <br> If using this as a web extension, it is useful to save the TV IP and Key into the code variables otherwise you will have to enter
         setup each time you restart your browser, since the extension has to reloaded on each restart.
         <br> To locally load the add-on in Firefox: visit the about:debugging page and then in [Add-ons] use the
         [Load Temporary Add-on] button and select any file in the folder where this extension is stored.
         <br>In Chrome, visit [More Tools] [Extensions] and use the [Local unpacked extension...] command.
-        <br>(<em>This has only been tested on Firefox</em>.)</p>
+        <br>Note that it is not always necessary to use this as a web extension. Try loading the
+        web page using a local <code>file:///.../sony-tv.html</code> URL and see if it works
+        on your system. It seems to work fine on Chrome as well as Firefox. That is, the
+        <code>file://</code> scheme is able to make XMLHttpRequest POST to a <code>http://10.somethime</code> local address, which technically should be disallowed by the same-origin policy restriction.
+        <br>(<em>This has only been tested on Firefox and Chrome. IT does not work on Microsoft Edge which does not support the standard Javascript code.</em>.)</p>
 
       <h3>TV Info (Commands)</h3>
       <p>Here's a way to see all the IRCC codes supported by the TV. There is usually no need to do
