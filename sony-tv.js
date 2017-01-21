@@ -2,12 +2,21 @@
      Sony TV Web Page Remote
      Uses Sony Bravia TV IRCC (IR like control commands) sent using HTTP POST.
 
+     Works on Chrome as well as Firefox.
+     Does not work on Microsoft Edge (localStorage, for of loop, etc)
+
      This script runs along with a web page that displays all the commands
      to send.
      Since this has to send a Javascript request to a different IP address,
-     it runs afoul of cross-domain restrictions. Therefore this page
-     is loaded using a Web Extension which needs to be installed manually
-     by the end-user.
+     it MAY run afoul of same origin policy restrictions. But there seem to be
+     edge conditions if the web page is saved locally and accessed using
+     file:// URL which then uses Javascript to POST to http:// URL, it works
+     fine in latest Chrome, Firefox (Jan 2017).
+     In any case, if that fails, here are the options:
+     1: Change this script to use node.js or server side scripting which
+     does not run afoul of same origin policy.
+     2: Load this as a Web Extension which asks for permissions to access
+     remote URLs, so avoids cross origin policy cross-domain restrictions.
 
      Requires Javascript ES2015 (ES6). Works with most browsers in 2017.
 
@@ -23,8 +32,23 @@
 
 let SONY_TV_IP = ''; // updated from local storage
 let SONY_TV_PRESHARED_KEY = '';
-// Default list of channels to show as quick-access channel buttons
-let MAKE_CHANNEL_BUTTONS = '2.1 4.1 5.1 7.2 25.3 27.1 38.1 56.1 62.3 62.4 66.2 66.4';
+// Default list of channels to show as quick-access channel command buttons
+// Format of each button is command-or-channel-number : button-name\n
+const DEFAULT_COMMAND_BUTTONS = `
+2.1 : PBS 2
+4.1 : CBS 4
+5.1 : ABC 5
+7.2 : this 7
+25.3 : LAFF
+27.1 : Uni 27
+38.1 : MyTV 38
+56.1 : CW 56
+62.3 : Works
+62.4 : Comet
+66.2 : Bounce
+66.4 : Esc
+`;
+let VERBOSITY = 0; // whether to display feedback after each click
 
 const SONY_TV_URL_PREFIX = 'http://';
 const SONY_TV_URL_SUFFIX = '/sony/IRCC';
@@ -37,6 +61,7 @@ const ID_TV_IP = 'tv-ip-address'; // ID of field that shows/updates TV IP
 const ID_TV_KEY = 'tv-key'; // ID of field that shows/updates TV Pre-Shared Key
 const ID_MAKE_CHANNEL_BUTTONS = 'make-channel-buttons'; // channel numbers
 const ID_CHANNEL_NUMBERS = 'tv-channel-numbers'; // displays channel buttons
+const ID_POPUP_TEXT = 'popup-text'; // normally hidden div to display messages
 const CLASS_TAB_CONTENT = 'tab-content'; // each tab content div (buttons, etc)
 const CLASS_TAB_LINK = 'tab-link'; // navigation bar for the tabs
 const CSS_TAB_LINK_ACTIVE = 'tab-color-active'; // css of active tab link
@@ -57,7 +82,9 @@ const DELAY_SEQUENCE = 700; // milliseconds to wait between sending codes.
 
 // --------------------------------------------------------------------------------
 const WHITESPACE_RE = /\s+/;
+const NEWLINE_RE = /\r?\n/;
 const CHANNEL_RE = /^([0-9]+\.[0-9]+|[0-9]+)$/;
+const COMMAND_AND_NAME_RE = / : /; // command : name format for custom buttons
 
 // --------------------------------------------------------------------------------
 // Send the IRCCCode code to the TV using a POST web request.
@@ -79,9 +106,10 @@ function sendCode(code) {
       if (req.status !== 200) {
         // Safety: JSON.parse does not evaluate the attacker's scripts.
         // const cleanedResponse = JSON.parse(req.responseText);
-        console.warn('Failed: ', tv_url, ' Key: ', SONY_TV_PRESHARED_KEY);
-        console.warn('Failed: Got status from req: ', req.status);
-        console.warn('Failed: Got responseText from req: ', req.responseText);
+        const message = 'Failed (Status ' + req.status + '): ' + tv_url + ' Key: '
+          + SONY_TV_PRESHARED_KEY + ' (Response: "' + req.responseText + '")';
+        console.warn(message);
+        displayPopup(message, 6000);
       }
     }
   }
@@ -277,6 +305,16 @@ function sleep(time) {
 }
 // sleep Usage: sleep(500).then(() => { Do something after the sleep });
 
+// Display a message as a popup div on the screen for a few seconds
+function displayPopup(message, time) {
+  const popup = document.getElementById(ID_POPUP_TEXT);
+  popup.textContent = message;
+  popup.classList.add('show');
+  setTimeout(() => popup.classList.remove('show'), time);
+  console.log('sent popup text to', popup);
+}
+
+// --------------------------------------------------------------------------------
 // Given a channel number, return a array of TV commands to enter that channel
 // Returns null if not a channel number.
 // Valid channels are digits and dots: 2 or 2.1 or 56.5 etc
@@ -341,6 +379,9 @@ function handleClick(e) {
       i++; // increment this for next code to be sent
     }
   }
+  if (VERBOSITY > 0) {
+    displayPopup('Sent: ' + buttonCommands, 3000);
+  }
 }
 
 // --------------------------------------------------------------------------------
@@ -354,13 +395,14 @@ function setupButtonsOnClick() {
   }
 }
 
-// Create DOM button elements for the quick access channel numbers 
-function createChannelButtons(channelsString) {
-  if (!channelsString) {
-    console.log('Skipping channel buttons creation - string is empty');
+// Create DOM button elements for the quick access commands or channels.
+// Format of each button is command-or-channel-number : button-name\n
+function createChannelButtons(commandsString) {
+  if (!commandsString) {
+    console.log('Skipping custom buttons creation - string is empty');
     return;
   }
-  const channels = channelsString.split(WHITESPACE_RE);
+  const commands = commandsString.split(NEWLINE_RE);
   const oldChannelsDiv = document.getElementById(ID_CHANNEL_NUMBERS);
 
   // remove existing channel buttons - child nodes of oldChannelsDiv
@@ -368,31 +410,33 @@ function createChannelButtons(channelsString) {
   oldChannelsDiv.parentNode.replaceChild(newParentDiv, oldChannelsDiv);
 
   // add all the new channels
-  for (let channel of channels) {
-    if (!CHANNEL_RE.test(channel)) {
-      console.error('Skipping invalid channel number: ', channel);
-      continue;
-    }
+  for (let commandAndName of commands) {
+    const commandAndNameV = commandAndName.split(COMMAND_AND_NAME_RE);
+    if (!commandAndNameV) continue;
+    const command = commandAndNameV[0];
+    if (!command) continue;
+    const name = commandAndNameV[1] || command;
+
     /* Example div to create for channel 2.1:
-    <div ... id="tv-channel-numbers">
-      <div class="column">
+    <div class="columns" id="tv-channel-numbers">
+      <div class="one-fourth-item">
         <button type="button" class="tv-command" data-stv:commands="2.1">2.1</button>
       </div>
       ...
     */
-    const newDiv = document.createElement('div');
-    newDiv.setAttribute('class', 'row-item');
+    const newItem = document.createElement('div');
+    newItem.setAttribute('class', 'one-fourth-item'); // 4 buttons per row
 
     const newButton = document.createElement('button');
-    newButton.appendChild(document.createTextNode(channel));
+    newButton.appendChild(document.createTextNode(name));
     newButton.setAttribute('class', 'tv-command');
     newButton.setAttribute('type', 'button');
-    newButton.setAttribute('data-stv:commands', channel);
-    newDiv.appendChild(newButton);
+    newButton.setAttribute('data-stv:commands', command);
+    newItem.appendChild(newButton);
 
-    // add the newly created element and its content into the DOM 
-    newParentDiv.appendChild(newDiv);
-    // console.log('Adding child ', newDiv);
+    // add the newly created row element and its content into the DOM 
+    newParentDiv.appendChild(newItem);
+    // console.log('Adding child ', newRow);
   }
 
   // Connect all buttons to the click handler
@@ -454,15 +498,20 @@ function saveTVSetup(e) {
   e.preventDefault();
   const IP = document.getElementById(ID_TV_IP).value;
   const key = document.getElementById(ID_TV_KEY).value;
+  let message = 'Data saved';
   if (IP == '' || key == '') {
-    console.error('Empty IP or Key, skipped and not stored');
+    message = 'Empty IP or Key, skipped and not stored';
+    console.warn(message);
   } else {
     localStorage.setItem(STORE_TV_IP, IP);
     localStorage.setItem(STORE_TV_KEY, key);
     const channelsString = document.getElementById(ID_MAKE_CHANNEL_BUTTONS).value;
     localStorage.setItem(STORE_CHANNEL_BUTTONS, channelsString);
   }
-  // Load the data into required fields
+
+  displayPopup(message, 3000);
+
+  // Load the data into required fields on the web page
   restoreTVSetup();
 }
 
@@ -472,7 +521,7 @@ function restoreTVSetup() {
   SONY_TV_IP = localStorage.getItem(STORE_TV_IP);
   SONY_TV_PRESHARED_KEY = localStorage.getItem(STORE_TV_KEY);
   const channelsString = localStorage.getItem(STORE_CHANNEL_BUTTONS) ||
-    MAKE_CHANNEL_BUTTONS;
+    DEFAULT_COMMAND_BUTTONS;
 
   document.getElementById(ID_TV_IP).value = SONY_TV_IP;
   document.getElementById(ID_TV_KEY).value = SONY_TV_PRESHARED_KEY;

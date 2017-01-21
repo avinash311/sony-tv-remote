@@ -1,49 +1,52 @@
 /**
  * Sony TV Web Page Remote
- * CSS3
+ * CSS3 and uses flexbox for columns/row table-like button layout.
  */
 
-div.three-columns {
-  -webkit-column-count: 3;
-  /* Chrome, Safari, Opera */
-  -moz-column-count: 3;
-  /* Firefox */
-  column-count: 3;
-  -webkit-column-gap: 3em;
-  -moz-column-gap: 3em;
-  column-gap: 3em;
+.columns {
+  margin: 0.5em 20px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-div.four-columns {
-  -webkit-column-count: 4;
-  /* Chrome, Safari, Opera */
-  -moz-column-count: 4;
-  /* Firefox */
-  column-count: 4;
-  -webkit-column-gap: 3em;
-  -moz-column-gap: 3em;
-  column-gap: 3em;
+.columns .one-fourth-item {
+  flex-basis: 21%; /* 1/4 * (100 - margin-left*4 - margin-right*4) */
+  margin: 0.5em 2%; /* Add some space around left/right edges of each item */
+}
+
+.columns .one-third-item {
+  flex-basis: 29%; /* 1/3 * (100 - margin-left*3 - margin-right*3) */
+  margin: 0.5em 2%; /* Add some space around left/right edges of each item */
+}
+
+.columns .one-half-item {
+  flex-basis: 47%; /* 1/2 * (100 - margin-left*2 - margin-right*2) */
+  margin: 0.5em 2%; /* Add some space around left/right edges of each item */
+}
+
+label textarea {
+  vertical-align: middle;
 }
 
 body {
   background: #ECECEC;
   margin: 0px auto;
   color: #333;
-  font-size: 1.0em;
 }
-
-.row {
-  margin: 0.5em 20px;
-}
-
-.row-item {}
 
 button {
   margin: 0.5em 0;
+  padding: 0.5em;
   /* this also helps on narrow width displays when the buttons are stacked */
   display: inline-block;
   font-size: 1.0em;
   text-decoration: none;
+}
+
+button:focus,
+button:hover {
+  background: #aca; /* For browsers that do not support gradients */
+  background: linear-gradient(#aca, #afa);
 }
 
 
@@ -61,23 +64,19 @@ button {
   text-decoration: none;
   margin: 0.5em 0;
   /* this also helps on narrow width displays when the buttons are stacked */
-  width: 6em;
-  /* default width */
-  background: #aac;
-  /* For browsers that do not support gradients */
+  width: 6em; /* default width */
+  background: #aac; /* For browsers that do not support gradients */
   background: linear-gradient(#aac, #aaf);
-  /* Standard syntax */
 }
 
 .tv-command i {
   font-style: normal;
 }
 
+.tv-command:focus,
 .tv-command:hover {
-  background: #aca;
-  /* For browsers that do not support gradients */
+  background: #aca; /* For browsers that do not support gradients */
   background: linear-gradient(#aca, #afa);
-  /* Standard syntax */
 }
 
 #tv-volume .tv-command,
@@ -112,7 +111,6 @@ ul.tabs-navigation {
   text-decoration: none;
 }
 
-
 /* Javascript adds this class to highlight active tab link */
 
 .tab-color-active {
@@ -122,6 +120,7 @@ ul.tabs-navigation {
 
 /* Change the link color to on hover */
 
+.tabs-navigation li a:focus,
 .tabs-navigation li a:hover {
   background-color: #292;
 }
@@ -130,4 +129,42 @@ ul.tabs-navigation {
 #controller-info {
   padding: 10px 20px;
   border: 1px solid black;
+}
+
+/* Popup to provide feedback after a click */
+/* The actual popup (appears on top) */
+.popup-text {
+  visibility: hidden;
+  background-color: #292;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  z-index: 1;
+  font-size: 1.3em;
+
+  padding: 1em 2em;
+
+  /* center this text in the middle of the browser screen */
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;} 
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
 }
