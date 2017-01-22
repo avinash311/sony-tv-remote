@@ -12,7 +12,7 @@ The web page has a setup that allows for creating custom buttons to send your ow
 For more information and screenshots of the extension web page, visit the home page
 which also has a link to an online working version of this web page Sony remote control.
 
-### Home Page: <a href="http://www.aczoom.com/tech/sony-tv-remote/">ACzoom.com/tech/sony-tv-remote/</a>
+### Home Page: <a href="http://www.aczoom.com/tech/sony-tv-remote/">ACZoom.com/tech/sony-tv-remote/</a>
 
 # No support
 
