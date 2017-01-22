@@ -75,12 +75,6 @@ button:hover {
   background: linear-gradient(#aca, #afa);
 }
 
-#tv-volume .tv-command,
-#tv-channels .tv-command {
-  width: 12em;
-}
-
-
 /* Tabs */
 
 ul.tabs-navigation {
@@ -88,7 +82,7 @@ ul.tabs-navigation {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #BBB;
+  background-color: #ccc;
   font-size: 1.1em;
   font-weight: bold;
   border: 1px solid black;

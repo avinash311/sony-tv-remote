@@ -91,7 +91,9 @@ const COMMAND_AND_NAME_RE = / : /; // command : name format for custom buttons
 // Send the IRCCCode code to the TV using a POST web request.
 function sendCode(code) {
   if (SONY_TV_IP == '' || SONY_TV_PRESHARED_KEY == '') {
-    console.error('Error: No Sony TV IP or PreShared Key setup yet.');
+    const message = 'Error: No Sony TV IP or PreShared Key setup yet.';
+    console.error(message);
+    displayPopup(message, 6000);
     return;
   }
   const req = new XMLHttpRequest();
@@ -499,15 +501,12 @@ function saveTVSetup(e) {
   const IP = document.getElementById(ID_TV_IP).value;
   const key = document.getElementById(ID_TV_KEY).value;
   let message = 'Data saved';
-  if (IP == '' || key == '') {
-    message = 'Empty IP or Key, skipped and not stored';
-    console.warn(message);
-  } else {
-    localStorage.setItem(STORE_TV_IP, IP);
-    localStorage.setItem(STORE_TV_KEY, key);
-    const channelsString = document.getElementById(ID_MAKE_CUSTOM_BUTTONS).value;
-    localStorage.setItem(STORE_CHANNEL_BUTTONS, channelsString);
-  }
+  // Save whaever value user has entered - even if it is empty
+  // to allow for clearing of stored values.
+  localStorage.setItem(STORE_TV_IP, IP);
+  localStorage.setItem(STORE_TV_KEY, key);
+  const channelsString = document.getElementById(ID_MAKE_CUSTOM_BUTTONS).value;
+  localStorage.setItem(STORE_CHANNEL_BUTTONS, channelsString);
 
   displayPopup(message, 3000);
 
@@ -543,6 +542,7 @@ function openTab(tabLink) {
     e.className = e.className.replace(replaceClass, '');
   }
   tabLink.className += replaceClass;
+  window.scrollTo(0, 0); // Jump to top of page
 }
 
 // Web page init setup
