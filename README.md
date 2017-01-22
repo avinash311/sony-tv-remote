@@ -70,7 +70,8 @@ to the TV.
 Just for reference, here are the HTTP headers actually seen on a computer
 loading this Sony TV Web Remote page:
 
-    Sent to TV when loading this page from the online page at a http://www.aczoom.com/..../sony-tv.html page:
+    Sent to TV when loading this page from the online page at
+        http://www.aczoom.com/..../sony-tv.html page:
       Access-Control-Request-Method: POST
       Origin: null
       Origin: http://www.aczoom.com\r\n
@@ -90,7 +91,7 @@ loading this Sony TV Web Remote page:
       Access-Control-Allow-Origin: http://10.0.0.29
 
 This means the Sony TV is correctly configured to send the CORS header, which for a Apache
-web server means enabling <code>Access-Control-Allow-Origin "\*"</code>.
+web server means enabling <code>Access-Control-Allow-Origin "<nowiki>*</nowiki>"</code>.
 If you are using a Sony TV without CORS setup, then the Web Extension is necessary and that will work.
 It uses Web Extension permissions to handle the Javascript same-origin policy.
 
