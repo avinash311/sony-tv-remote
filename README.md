@@ -1,7 +1,7 @@
 # sony-tv-remote
 Sony TV Web Page Remote Control - Web Extension
 
-## Web Extension
+## Web Page based Sony Remote Control
 
 This is a web page based Sony TV Remote Control.
 
