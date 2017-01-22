@@ -9,9 +9,10 @@ It can be used online, installed locally, or installed as a web extension.
 
 The web page has a setup that allows for creating custom buttons to send your own commands to the TV, and it comes bundled with some fixed commands (such as Mute, Volume Up and Down, Power On/Off, etc).
 
-For more information and screenshots of the extension web page, visit the home page:
-<a href="http://www.aczoom.com/tech/sony-tv-remote/">aczoom.com/tech/sony-tv-remote/</a>.
-It also has a link to an online working version of this web page Sony remote control.
+For more information and screenshots of the extension web page, visit the home page
+which also has a link to an online working version of this web page Sony remote control.
+
+### Home Page: <a href="http://www.aczoom.com/tech/sony-tv-remote/">ACzoom.com/tech/sony-tv-remote/</a>
 
 # No support
 
