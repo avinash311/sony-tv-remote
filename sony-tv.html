@@ -152,6 +152,7 @@
           </label> </p>
           <hr>
           <button type="submit">Save</button>
+          <p>Data is saved locally on this browser.</p>
         </fieldset>
       </form>
       <p class="messages"></p>
@@ -167,7 +168,7 @@
 
       <h2>Help</h2>
       <p>For details on how this works, the best choice is looking at the source code: <a href="https://github.com/avinash311/sony-tv-remote">Sony TV Web Page Remote source code</a>.
-        <br>(<em>This has only been tested on Firefox and Chrome. It does not work on Microsoft Edge which does not support the standard Javascript code used here.</em>.)</p>
+        <br>(<em>This has only been tested on Firefox and Chrome. It does not work on Microsoft Edge which does not support the standard Javascript code used here</em>.)</p>
       <p>Using this requires the TV to support IRCC control
         (Sony Bravia TV IR (infrared)-like-control-commands), have a fixed IP
         address, and allow remote access using a pre-shared key.
@@ -178,8 +179,6 @@
           <code>[Settings] [Network] [Home Network Setup] [IP Control] [Pre-Shared Key]</code>
         <br> Set [Authentication] to [Normal and Pre-Shared Key]
       <p>If the TV IP address is not fixed, give your TV a static IP address or make a DHCP reservation for a specific IP address in your router.</p>
-      <p>Enter the TV IP and Key in the <code>Setup</code> form on this page, and click Save.
-        <br> Once that is done, the buttons on the page can be used to send commands.</p>
       <p>Enter the list of over-the-air channels or TV commands you want direct access to on the
         <code>Buttons</code> tab.
         <br> This will create a button for each channel or command.
@@ -193,6 +192,15 @@ Netflix : Netflix
         <p>Where the <code> : </code> (space colon space) separates the TV commands or channel
         number from the button name.<br>
         <br> This will create a button for each channel or command.</p>
+      <p>After all data is entered, click Save.
+        <br> Once that is done, the buttons on the page can be used to send commands.</p>
+      <p>
+        All data is saved locally, there is no information sent back to the web server.
+        <br> This maintains user privacy. The data is stored by the local browser, so it can
+        reload the data when it is restarted. It also means that each time a different browser
+        is used, or a browser on a different device, the setup information needs to be
+        re-entered.
+        </p>
 
       <h3>Troubleshooting</h3>
 

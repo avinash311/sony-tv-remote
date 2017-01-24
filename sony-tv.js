@@ -48,7 +48,14 @@ const DEFAULT_COMMAND_BUTTONS = `
 66.2 : Bounce
 66.4 : Esc
 `;
-let VERBOSITY = 0; // whether to display feedback after each click
+// While console.log, warn, etc are used liberally, messages to the user
+// are limited by MESSAGE_LEVEL setting. These are messages displayed in
+// a popup (temporarily) div on the page.
+let MESSAGE_LEVEL = 2; // displays all LEVEL_ message <= this value
+
+const LEVEL_ERROR = 0; // message level for error messages
+const LEVEL_FEEDBACK = 1; // message level for key button click messages
+const LEVEL_INFO = 2; // message level for each remote button click
 
 const SONY_TV_URL_PREFIX = 'http://';
 const SONY_TV_URL_SUFFIX = '/sony/IRCC';
@@ -87,13 +94,16 @@ const NEWLINE_RE = /\r?\n/;
 const CHANNEL_RE = /^([0-9]+\.[0-9]+|[0-9]+)$/;
 const COMMAND_AND_NAME_RE = / : /; // command : name format for custom buttons
 
+let SendError = 0; // set to 1 if there is a error in the async sendCode
+
 // --------------------------------------------------------------------------------
 // Send the IRCCCode code to the TV using a POST web request.
-function sendCode(code) {
+function sendCode(code, command) {
   if (SONY_TV_IP == '' || SONY_TV_PRESHARED_KEY == '') {
     const message = 'Error: No Sony TV IP or PreShared Key setup yet.';
     console.error(message);
-    displayPopup(message, 6000);
+    displayPopup(message, LEVEL_ERROR, 6000);
+    SendError = 1;
     return;
   }
   const req = new XMLHttpRequest();
@@ -109,10 +119,14 @@ function sendCode(code) {
       if (req.status !== 200) {
         // Safety: JSON.parse does not evaluate the attacker's scripts.
         // const cleanedResponse = JSON.parse(req.responseText);
-        const message = 'Failed (Status ' + req.status + '): ' + tv_url + ' Key: '
-          + SONY_TV_PRESHARED_KEY + ' (Response: "' + req.responseText + '")';
-        console.warn(message);
-        displayPopup(message, 6000);
+        const message = 'Failed ' + command + ' ' + code + ' (Status '
+          + req.status + '): ' + tv_url + ' Key: ' + SONY_TV_PRESHARED_KEY
+          + ' (Response: "' + req.responseText + '")';
+        console.error(message);
+        displayPopup(message, LEVEL_ERROR, 6000);
+        SendError = 1;
+      } else {
+        // console.log('POST response received: ' + command + ' ' + code);
       }
     }
   }
@@ -308,13 +322,23 @@ function sleep(time) {
 }
 // sleep Usage: sleep(500).then(() => { Do something after the sleep });
 
-// Display a message as a popup div on the screen for a few seconds
-function displayPopup(message, time) {
+// Pops up a div. Assigns its text content to the message, if message
+// is not null.
+// Message is shown only if level <= MESSAGE_LEVEL.
+// If msec provided and is > 0, it is removed after that many milliseconds.
+function displayPopup(message, level, msec = 0) {
+  // console.log('Message: ', message);
+  if (level > MESSAGE_LEVEL) {
+    return;
+  }
   const popup = document.getElementById(ID_POPUP_TEXT);
-  popup.textContent = message;
+  if (message != null) {
+    popup.textContent = message;
+  }
   popup.classList.add('show');
-  setTimeout(() => popup.classList.remove('show'), time);
-  console.log('sent popup text to', popup);
+  if (msec > 0) {
+    setTimeout(() => popup.classList.remove('show'), msec);
+  }
 }
 
 // --------------------------------------------------------------------------------
@@ -338,7 +362,7 @@ function channelToCommands(number) {
     }
     commands.push(command);
   }
-  console.log('Channel ' + number + ' is ' + commands);
+  // console.log('Channel ' + number + ' is ' + commands);
   return commands;
 }
 
@@ -355,9 +379,13 @@ function buttonToCommands(button) {
 // this object here is a DOM object with dataset[DATASET_COMMANDS]
 function handleClick(e) {
   e.preventDefault();
+  SendError = 0; // clear sendCode state
   // command may be one or more commands (keys of the COMMAND_MAP) separated by space
-  const codes = [];
   const buttonCommands = buttonToCommands(this);
+  // For feedback, display codes as they are sent
+  let message = 'Sent:';
+
+  displayPopup(message, LEVEL_INFO); // will clear this on function exit
 
   let i = 0; // TV code number send index
   for (let bCommand of buttonCommands) {
@@ -376,14 +404,19 @@ function handleClick(e) {
       // 0th code gets a 0 delay.
       sleep(delay).then(() => {
         // Send the code to the TV using XMLHttpRequest
-        sendCode(code);
+        sendCode(code, command);
+        message += ' ' + command;
+        if (!SendError) {
+          displayPopup(message, LEVEL_INFO);
+        }
       });
 
       i++; // increment this for next code to be sent
     }
   }
-  if (VERBOSITY > 0) {
-    displayPopup('Sent: ' + buttonCommands, 3000);
+  if (!SendError) {
+    const delay = i * DELAY_SEQUENCE;
+    displayPopup(message, LEVEL_INFO, delay + 3000);
   }
 }
 
@@ -500,15 +533,15 @@ function saveTVSetup(e) {
   e.preventDefault();
   const IP = document.getElementById(ID_TV_IP).value;
   const key = document.getElementById(ID_TV_KEY).value;
-  let message = 'Data saved';
-  // Save whaever value user has entered - even if it is empty
+  let message = 'Data saved locally.';
+  // Save whatever value user has entered - even if it is empty
   // to allow for clearing of stored values.
   localStorage.setItem(STORE_TV_IP, IP);
   localStorage.setItem(STORE_TV_KEY, key);
   const channelsString = document.getElementById(ID_MAKE_CUSTOM_BUTTONS).value;
   localStorage.setItem(STORE_CHANNEL_BUTTONS, channelsString);
 
-  displayPopup(message, 3000);
+  displayPopup(message, LEVEL_FEEDBACK, 3000);
 
   // Load the data into required fields on the web page
   restoreTVSetup();
