@@ -86,78 +86,88 @@ const STORE_CHANNEL_BUTTONS = 'ChannelButtons';
 // between the codes. Set this to 0 avoid any extra delays between sending codes.
 // Note: some of the command sequences - such as Wide display command - need a
 // long delay, 500ms seems to work, 300ms causes Up Up ... keys to be skipped.
-const DELAY_SEQUENCE = 700; // milliseconds to wait between sending codes.
+const WAIT_ATFER_COMMAND = 700; // milliseconds to wait between sending codes.
 
 // --------------------------------------------------------------------------------
 const WHITESPACE_RE = /\s+/;
 const NEWLINE_RE = /\r?\n/;
 const CHANNEL_RE = /^([0-9]+\.[0-9]+|[0-9]+)$/;
-const COMMAND_AND_NAME_RE = / : /; // command : name format for custom buttons
-
-let SendError = 0; // set to 1 if there is a error in the async sendCode
+const COMMAND_AND_NAME_RE = / : /; // "command : name" format for custom buttons
 
 // --------------------------------------------------------------------------------
-// Send the IRCCCode code to the TV using a POST web request.
-function sendCode(code, command) {
-  if (SONY_TV_IP == '' || SONY_TV_PRESHARED_KEY == '') {
-    const message = 'Error: No Sony TV IP or PreShared Key setup yet.';
-    console.error(message);
-    displayPopup(message, LEVEL_ERROR, 6000);
-    SendError = 1;
-    return;
-  }
-  const req = new XMLHttpRequest();
-  const tv_url = SONY_TV_URL_PREFIX + SONY_TV_IP + SONY_TV_URL_SUFFIX;
-  // Making a async xmlhttprequest, this will not always work when sending
-  // a list of commands, one after the other. So we add a delay between
-  // codes. It would be fine to change this to a synchronous call and use
-  // a WebWorker thread to send lists of codes.
-  req.open('POST', tv_url, true);
+// Send the IRCCCode code of given COMMAND to the TV using a POST web request.
+// Returns a Promise that resolves when the request response is received.
+function sendCommand(command) {
+  return new Promise(function(resolve, reject) {
 
-  req.onreadystatechange = function() {
-    if (req.readyState == 4) { // XMLHttpRequest.DONE
-      if (req.status !== 200) {
-        // Safety: JSON.parse does not evaluate the attacker's scripts.
-        // const cleanedResponse = JSON.parse(req.responseText);
-        const message = 'Failed ' + command + ' ' + code + ' (Status '
-          + req.status + '): ' + tv_url + ' Key: ' + SONY_TV_PRESHARED_KEY
-          + ' (Response: "' + req.responseText + '")';
-        console.error(message);
-        displayPopup(message, LEVEL_ERROR, 6000);
-        SendError = 1;
-      } else {
-        // console.log('POST response received: ' + command + ' ' + code);
+    if (SONY_TV_IP == '' || SONY_TV_PRESHARED_KEY == '') {
+      const message = 'Error: No Sony TV IP or PreShared Key setup yet.';
+      console.error(message);
+      reject(new Error(message));
+      return;
+    }
+
+    const code = commandToCode(command);
+    if (!code) {
+      const message = 'Error: IRCC code found for command: ' + command;
+      console.error(message);
+      reject(new Error(message));
+      return;
+    }
+
+    const req = new XMLHttpRequest();
+    const tv_url = SONY_TV_URL_PREFIX + SONY_TV_IP + SONY_TV_URL_SUFFIX;
+    // Making a async xmlhttprequest, this will not always work when sending
+    // a list of commands, one after the other. So caller adds a delay between
+    // codes. It would be fine to change this to a synchronous call and use
+    // a WebWorker thread to send lists of codes.
+    req.open('POST', tv_url, true);
+
+    req.onreadystatechange = function() {
+      if (req.readyState == 4) { // XMLHttpRequest.DONE
+        if (req.status != 200) {
+          // Safety: JSON.parse does not evaluate the attacker's scripts.
+          // const cleanedResponse = JSON.parse(req.responseText);
+          const message = 'Failed ' + command + ' ' + code + ' (Status '
+            + req.status + '): ' + tv_url + ' Key: ' + SONY_TV_PRESHARED_KEY
+            + ' (Response: "' + req.responseText + '")';
+          console.error(message);
+          reject(new Error(message));
+        } else {
+          // console.log('POST response received for: ' + command + ' ' + code);
+          resolve();
+        }
       }
     }
-  }
 
-  req.setRequestHeader('Content-Type', 'text/xml; charset=UTF-8');
-  // Note: The SOAPAction header value must be enclosed in " otherwise get
-  // an Invalid Action error from TV!
-  req.setRequestHeader('SOAPAction', '"urn:schemas-sony-com:service:IRCC:1#X_SendIRCC"');
-  req.setRequestHeader('X-Auth-PSK', SONY_TV_PRESHARED_KEY);
-  const data =
-    `<?xml version="1.0"?>
-    <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-      <s:Body>
-        <u:X_SendIRCC xmlns:u="urn:schemas-sony-com:service:IRCC:1">
-          <IRCCCode>${code}</IRCCCode>
-        </u:X_SendIRCC>
-      </s:Body>
-    </s:Envelope>`;
+    req.setRequestHeader('Content-Type', 'text/xml; charset=UTF-8');
+    // Note: The SOAPAction header value must be enclosed in " otherwise get
+    // an Invalid Action error from TV!
+    req.setRequestHeader('SOAPAction', '"urn:schemas-sony-com:service:IRCC:1#X_SendIRCC"');
+    req.setRequestHeader('X-Auth-PSK', SONY_TV_PRESHARED_KEY);
+    const data =
+      `<?xml version="1.0"?>
+      <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+        <s:Body>
+          <u:X_SendIRCC xmlns:u="urn:schemas-sony-com:service:IRCC:1">
+            <IRCCCode>${code}</IRCCCode>
+          </u:X_SendIRCC>
+        </s:Body>
+      </s:Envelope>`;
 
-  /* Other errors to watch for:
-     Incorrect IRCC code results in: 
-   HTTP/1.1 500 Internal Server Error
-   <errorCode>800</errorCode>
-   <errorDescription>Cannot accept the IRCC Code</errorDescription>
-   */
+    /* Other errors to watch for:
+       Incorrect IRCC code results in: 
+     HTTP/1.1 500 Internal Server Error
+     <errorCode>800</errorCode>
+     <errorDescription>Cannot accept the IRCC Code</errorDescription>
+     */
 
-  req.timeout = 3000; // in milliseconds
-  req.send(data);
-  // Note: do not escape(data), that results in UPnPError:
-  //      <errorCode>401</errorCode>
-  //      <errorDescription>Invalid Action</errorDescription>
+    req.timeout = 3000; // in milliseconds
+    req.send(data);
+    // Note: do not escape(data), that results in UPnPError:
+    //      <errorCode>401</errorCode>
+    //      <errorDescription>Invalid Action</errorDescription>
+  });
 }
 
 // --------------------------------------------------------------------------------
@@ -177,7 +187,7 @@ function getRemoteControllerInfo(controllerOutputDiv) {
 
   req.onreadystatechange = function() {
     if (req.readyState == 4) { // XMLHttpRequest.DONE
-      if (req.status === 200) {
+      if (req.status == 200) {
         controllerOutputDiv.textContent = req.responseText;
       } else {
         console.warn('Failed: Got status from req: ', req.status);
@@ -322,12 +332,13 @@ function sleep(time) {
 }
 // sleep Usage: sleep(500).then(() => { Do something after the sleep });
 
-// Pops up a div. Assigns its text content to the message, if message
-// is not null.
+// --------------------------------------------------------------------------------
+// Pops up the ID_POPUP_TEXT div. Assigns its text content to the message,
+// if message is not null.
 // Message is shown only if level <= MESSAGE_LEVEL.
-// If msec provided and is > 0, it is removed after that many milliseconds.
-function displayPopup(message, level, msec = 0) {
-  // console.log('Message: ', message);
+// If msec provided and is >= 0, popup is removed after that many milliseconds.
+function displayPopup(message, level, msec = -1) {
+  // console.log('Display Message: ', message, msec);
   if (level > MESSAGE_LEVEL) {
     return;
   }
@@ -336,7 +347,7 @@ function displayPopup(message, level, msec = 0) {
     popup.textContent = message;
   }
   popup.classList.add('show');
-  if (msec > 0) {
+  if (msec >= 0) {
     setTimeout(() => popup.classList.remove('show'), msec);
   }
 }
@@ -366,6 +377,7 @@ function channelToCommands(number) {
   return commands;
 }
 
+// --------------------------------------------------------------------------------
 // Return the array of commands based on the button
 // While each button usually has a single command, it can be a sequence of
 // commands separated by space. Commands may be TV commands or channel numbers.
@@ -375,49 +387,50 @@ function buttonToCommands(button) {
   return buttonCommand.split(WHITESPACE_RE);
 }
 
+// --------------------------------------------------------------------------------
 // Button click listener that executes the remote command or commands
 // this object here is a DOM object with dataset[DATASET_COMMANDS]
 function handleClick(e) {
   e.preventDefault();
-  SendError = 0; // clear sendCode state
   // command may be one or more commands (keys of the COMMAND_MAP) separated by space
   const buttonCommands = buttonToCommands(this);
-  // For feedback, display codes as they are sent
-  let message = 'Sent:';
 
-  displayPopup(message, LEVEL_INFO); // will clear this on function exit
-
-  let i = 0; // TV code number send index
+  // Create a flat list of all commands to be sent for this button
+  const allCommands = [];
   for (let bCommand of buttonCommands) {
     // bCommand may be a single TV command or a channel number
     const channelCommands = channelToCommands(bCommand);
     const commands = channelCommands || [bCommand];
+    Array.prototype.push.apply(allCommands, commands);
+  }
 
-    for (let command of commands) {
-      const code = commandToCode(command);
-      const delay = i * DELAY_SEQUENCE;
+  // For feedback, display codes as they are sent
+  let message = 'Sent:'; // Used by then() closure below
 
-      console.log(`Send at ${delay}ms: Command '${command}' Code '${code}'`);
+  displayPopup(message, LEVEL_INFO); // will clear this on command completion
 
-      // To avoid sending too many commands too fast,
-      // wait here for a while in between sending codes.
-      // 0th code gets a 0 delay.
-      sleep(delay).then(() => {
-        // Send the code to the TV using XMLHttpRequest
-        sendCode(code, command);
+  // Chain the sending of the commands through the async HTTP request calls,
+  // and insert a short delay after each command.
+  // Reduce all commands to a single Promise. 
+  allCommands.reduce((sequence, command) => {
+    return sequence
+      .then(() => {
         message += ' ' + command;
-        if (!SendError) {
-          displayPopup(message, LEVEL_INFO);
-        }
+        console.log(`Send Command '${command}' Code '${COMMAND_MAP[command]}'`);
+        displayPopup(message, LEVEL_INFO);
+        return sendCommand(command);
+      }).then(() => {
+        // After the TV HTTP request has responded, wait a bit more
+        // to allow TV some time to complete command.
+        return sleep(WAIT_ATFER_COMMAND);
       });
-
-      i++; // increment this for next code to be sent
-    }
-  }
-  if (!SendError) {
-    const delay = i * DELAY_SEQUENCE;
-    displayPopup(message, LEVEL_INFO, delay + 3000);
-  }
+  }, Promise.resolve()) // Start the reduce with an resolved promise
+    .then(() => { // All commands completed
+      displayPopup(null, LEVEL_INFO, 3000); // now clear the message
+    }).catch((err) => {
+      // This will come here if any of the tasks above rejects or throws Error
+      displayPopup(err.message, LEVEL_ERROR, 6000);
+    });
 }
 
 // --------------------------------------------------------------------------------
@@ -431,6 +444,7 @@ function setupButtonsOnClick() {
   }
 }
 
+// --------------------------------------------------------------------------------
 // Create DOM button elements for the quick access commands or channels.
 // Format of each button is command-or-channel-number : button-name\n
 function createChannelButtons(commandsString) {
@@ -524,6 +538,7 @@ function onLoadFunction() {
   }
 }
 
+// --------------------------------------------------------------------------------
 // Save and restore setup options.
 // This used to use web extension storage functions browser.storage.local
 // but now uses simpler localStorage since we don't need to communicate
@@ -563,6 +578,7 @@ function restoreTVSetup() {
   createChannelButtons(channelsString);
 }
 
+// --------------------------------------------------------------------------------
 // Tabs support
 function openTab(tabLink) {
   for (let e of document.getElementsByClassName(CLASS_TAB_CONTENT)) {
@@ -578,5 +594,6 @@ function openTab(tabLink) {
   window.scrollTo(0, 0); // Jump to top of page
 }
 
+// --------------------------------------------------------------------------------
 // Web page init setup
 window.onload = onLoadFunction;
