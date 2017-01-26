@@ -79,14 +79,11 @@ const STORE_TV_IP = 'SonyTVIP';
 const STORE_TV_KEY = 'SonyTVPreSharedKey';
 const STORE_CHANNEL_BUTTONS = 'ChannelButtons';
 
-// When sending a sequence of codes, such as for a channel number:
-// Num3 Num8 DOT Num1 (38.1), or arrow sequences Wide Up Up
-// it is necessary to wait a short while before sending the async requests.
-// This defines the delay - wait at least this much (may wait a bit less)
-// between the codes. Set this to 0 avoid any extra delays between sending codes.
-// Note: some of the command sequences - such as Wide display command - need a
+// The TV takes some time to complete commands, even after sending back
+// the XMLHttpRequest response. While many commands finish fast,
+// some of the command sequences - such as Wide display command - need a
 // long delay, 500ms seems to work, 300ms causes Up Up ... keys to be skipped.
-const WAIT_ATFER_COMMAND = 700; // milliseconds to wait between sending codes.
+const WAIT_AFTER_COMMAND = 700; // milliseconds to wait after sending a code
 
 // --------------------------------------------------------------------------------
 const WHITESPACE_RE = /\s+/;
@@ -173,32 +170,41 @@ function sendCommand(command) {
 // --------------------------------------------------------------------------------
 // Get the list of commands supported by the TV. This only needs the URL,
 // no need to send the TV Pre-Shared Key. Send this as a JSON command.
-// curl --silent -XPOST http://$SonyBraviaIP/sony/system -d '{"method":"getRemoteControllerInfo","params":[],"id":10,"version":"1.0"}'  | python -m json.tool
+// Returns a Promise object that resolves on a succeful POST response.
+// Equivalant to: curl --silent -XPOST http://$SonyBraviaIP/sony/system -d '{"method":"getRemoteControllerInfo","params":[],"id":10,"version":"1.0"}'  | python -m json.tool
 function getRemoteControllerInfo(controllerOutputDiv) {
-  if (SONY_TV_IP == '') {
-    console.error('Error: No Sony TV IP setup yet.');
-    return;
-  }
-  const req = new XMLHttpRequest();
-  const tv_url = SONY_TV_URL_PREFIX + SONY_TV_IP + '/sony/system' ;
-  req.open('POST', tv_url, true);
-  req.setRequestHeader('Content-Type', 'text/xml; charset=UTF-8');
-  req.timeout = 3000; // in milliseconds
+  return new Promise(function(resolve, reject) {
+    if (SONY_TV_IP == '') {
+      const message = 'Error: No Sony TV IP setup yet.';
+      console.error(message);
+      reject(new Error(message));
+      return;
+    }
+    const req = new XMLHttpRequest();
+    const tv_url = SONY_TV_URL_PREFIX + SONY_TV_IP + '/sony/system' ;
+    req.open('POST', tv_url, true);
+    req.setRequestHeader('Content-Type', 'text/xml; charset=UTF-8');
+    req.timeout = 3000; // in milliseconds
 
-  req.onreadystatechange = function() {
-    if (req.readyState == 4) { // XMLHttpRequest.DONE
-      if (req.status == 200) {
-        controllerOutputDiv.textContent = req.responseText;
-      } else {
-        console.warn('Failed: Got status from req: ', req.status);
-        console.warn('Failed: Got responseText from req: ', req.responseText);
+    req.onreadystatechange = function() {
+      if (req.readyState == 4) { // XMLHttpRequest.DONE
+        if (req.status == 200) {
+          // console.log('POST response received for: ' + command + ' ' + code);
+          resolve(req.responseText);
+        } else {
+          const message = 'Failed to get TV info (Status '
+            + req.status + '): ' + tv_url
+            + ' (Response: "' + req.responseText + '")';
+          console.error(message);
+          reject(new Error(message));
+        }
       }
     }
-  }
 
-  const data = '{"method":"getRemoteControllerInfo","params":[],"id":10,"version":"1.0"}';
-  req.send(data);
-  console.log('Sent getRemoteControllerInfo POST');
+    const data = '{"method":"getRemoteControllerInfo","params":[],"id":10,"version":"1.0"}';
+    req.send(data);
+    console.log('Sent POST to get TV commands');
+  });
 }
 
 // --------------------------------------------------------------------------------
@@ -346,9 +352,16 @@ function displayPopup(message, level, msec = -1) {
   if (message != null) {
     popup.textContent = message;
   }
-  popup.classList.add('show');
+  // Because we can't (easily) do both fade-in on start and fade-out on end,
+  // stick to doing a fade-out after the times, looks nicer that way.
+  // This means we need to remove the hide class on start, and add it again
+  // when done. Also need to remove the initial class added to hide visibility
+  // on page load. [hide-initial is never added again]
+  popup.classList.remove('hide', 'hide-initial');
   if (msec >= 0) {
-    setTimeout(() => popup.classList.remove('show'), msec);
+    sleep(msec).then(() => {
+      popup.classList.add('hide');
+    });
   }
 }
 
@@ -422,7 +435,7 @@ function handleClick(e) {
       }).then(() => {
         // After the TV HTTP request has responded, wait a bit more
         // to allow TV some time to complete command.
-        return sleep(WAIT_ATFER_COMMAND);
+        return sleep(WAIT_AFTER_COMMAND);
       });
   }, Promise.resolve()) // Start the reduce with an resolved promise
     .then(() => { // All commands completed
@@ -521,10 +534,14 @@ function onLoadFunction() {
 
   // Help page has a button to query TV for list of IRCC codes it knows about
   const controller = document.getElementById('controller-info-button');
-  if (controller) {
-    const controllerOutput = document.getElementById('controller-info-output');
+  const controllerOutput = document.getElementById('controller-info-output');
+  if (controller && controllerOutput) {
     controller.onclick = () => {
-     getRemoteControllerInfo(controllerOutput);
+      getRemoteControllerInfo().then((responseText) => {
+        controllerOutput.textContent = responseText;
+      }).catch((err) => {
+        displayPopup(err.message, LEVEL_ERROR, 6000);
+      });
     }
   }
 

@@ -124,7 +124,11 @@ ul.tabs-navigation {
 /* Popup to provide feedback after a click */
 /* The actual popup (appears on top) */
 .popup-text {
-  visibility: hidden;
+  /* visibilty is controlled by adding a hide-initial to html.
+   * That allows using the hide class below to fade out the popup
+   * Javascript code removes hide and hide-initial when it wants to show
+   * text in this popup, and adds hide when it wants to remove it.
+   */
   background-color: #292;
   color: #fff;
   text-align: center;
@@ -145,16 +149,39 @@ ul.tabs-navigation {
 .show {
   visibility: visible;
   -webkit-animation: fadeIn 1s;
-  animation: fadeIn 1s
+  animation: fadeIn 1s;
 }
 
-/* Add animation (fade in the popup) */
+/* add this to the HTML to hide class on page load */
+.hide-initial {
+  visibility: hidden;
+}
+
+/* Or alternately, if starting with a displayed div, this will hide it (not working!) */
+.hide {
+  visibility: hidden;
+  -webkit-animation: fadeOut 1s;
+  animation: fadeOut 1s;
+}
+
+/* Add animation (fade in the div, and then show it) */
 @-webkit-keyframes fadeIn {
-  from {opacity: 0;} 
+  from {opacity: 0;}
   to {opacity: 1;}
 }
 
 @keyframes fadeIn {
   from {opacity: 0;}
-  to {opacity:1 ;}
+  to {opacity: 1;}
+}
+
+/* Add animation (fade out the div, and then hide it) - not tested */
+@-webkit-keyframes fadeOut {
+  from {opacity: 1; visibility: visible;} 
+  to {opacity: 0; visibility: hidden;}
+}
+
+@keyframes fadeOut {
+  from {opacity: 1; visibility: visible;}
+  to {opacity: 0; visibility: hidden;}
 }
