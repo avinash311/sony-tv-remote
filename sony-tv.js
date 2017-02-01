@@ -84,6 +84,8 @@ const STORE_CHANNEL_BUTTONS = 'ChannelButtons';
 // some of the command sequences - such as Wide display command - need a
 // long delay, 500ms seems to work, 300ms causes Up Up ... keys to be skipped.
 const WAIT_AFTER_COMMAND = 700; // milliseconds to wait after sending a code
+const STATUS_MESSAGE_TIME = 2300; // after commands, show message for this long
+const ERROR_MESSAGE_TIME = 5000; // after error, show message for this long
 
 // --------------------------------------------------------------------------------
 const WHITESPACE_RE = /\s+/;
@@ -439,10 +441,10 @@ function handleClick(e) {
       });
   }, Promise.resolve()) // Start the reduce with an resolved promise
     .then(() => { // All commands completed
-      displayPopup(null, LEVEL_INFO, 3000); // now clear the message
+      displayPopup(null, LEVEL_INFO, STATUS_MESSAGE_TIME); // now clear the message
     }).catch((err) => {
       // This will come here if any of the tasks above rejects or throws Error
-      displayPopup(err.message, LEVEL_ERROR, 6000);
+      displayPopup(err.message, LEVEL_ERROR, ERROR_MESSAGE_TIME);
     });
 }
 
@@ -540,7 +542,7 @@ function onLoadFunction() {
       getRemoteControllerInfo().then((responseText) => {
         controllerOutput.textContent = responseText;
       }).catch((err) => {
-        displayPopup(err.message, LEVEL_ERROR, 6000);
+        displayPopup(err.message, LEVEL_ERROR, ERROR_MESSAGE_TIME);
       });
     }
   }
@@ -573,7 +575,7 @@ function saveTVSetup(e) {
   const channelsString = document.getElementById(ID_MAKE_CUSTOM_BUTTONS).value;
   localStorage.setItem(STORE_CHANNEL_BUTTONS, channelsString);
 
-  displayPopup(message, LEVEL_FEEDBACK, 3000);
+  displayPopup(message, LEVEL_FEEDBACK, STATUS_MESSAGE_TIME);
 
   // Load the data into required fields on the web page
   restoreTVSetup();
