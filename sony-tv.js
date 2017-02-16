@@ -69,6 +69,7 @@ const ID_TV_KEY = 'tv-key'; // ID of field that shows/updates TV Pre-Shared Key
 const ID_MAKE_CUSTOM_BUTTONS = 'make-custom-buttons'; // channel numbers
 const ID_CHANNEL_NUMBERS = 'tv-channel-numbers'; // displays channel buttons
 const ID_POPUP_TEXT = 'popup-text'; // normally hidden div to display messages
+var POPUP_TEXT_ELEMENT = null; // ID_POPUP_TEXT element
 const CLASS_TAB_CONTENT = 'tab-content'; // each tab content div (buttons, etc)
 const CLASS_TAB_LINK = 'tab-link'; // navigation bar for the tabs
 const CSS_TAB_LINK_ACTIVE = 'tab-color-active'; // css of active tab link
@@ -334,7 +335,9 @@ function commandToCode(command) {
 
 // --------------------------------------------------------------------------------
 
-// sleep for time in milliseconds
+// sleep for time in milliseconds. Note that this will take much longer than
+// wall clock time if the browser tab is put in background, since this counts
+// time spent in this thread.
 function sleep(time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
@@ -345,25 +348,44 @@ function sleep(time) {
 // if message is not null.
 // Message is shown only if level <= MESSAGE_LEVEL.
 // If msec provided and is >= 0, popup is removed after that many milliseconds.
+// Only one popup is allowed at any time. And because we don't want the
+// popup to wait for more than msec in wall clock time, we can't use
+// the setTimeout function for that amount, but have to keep calling it
+// until the elapsed time is as needed.
+const POPUP_CHECK_PERIOD = 100; // msec, how often to check if timer has elapsed
+var popupEndTime = 0;
+
+function checkClearPopup() {
+  const timeLeft = popupEndTime - Date.now();
+
+  if (timeLeft <= 0) {
+    POPUP_TEXT_ELEMENT.classList.add('hide');
+  } else {
+    const delay = Math.min(timeLeft, POPUP_CHECK_PERIOD);
+    setTimeout(checkClearPopup, delay);
+  }
+}
 function displayPopup(message, level, msec = -1) {
   // console.log('Display Message: ', message, msec);
   if (level > MESSAGE_LEVEL) {
     return;
   }
-  const popup = document.getElementById(ID_POPUP_TEXT);
   if (message != null) {
-    popup.textContent = message;
+    POPUP_TEXT_ELEMENT.textContent = message;
   }
   // Because we can't (easily) do both fade-in on start and fade-out on end,
   // stick to doing a fade-out after the times, looks nicer that way.
   // This means we need to remove the hide class on start, and add it again
   // when done. Also need to remove the initial class added to hide visibility
   // on page load. [hide-initial is never added again]
-  popup.classList.remove('hide', 'hide-initial');
+  POPUP_TEXT_ELEMENT.classList.remove('hide', 'hide-initial');
   if (msec >= 0) {
-    sleep(msec).then(() => {
-      popup.classList.add('hide');
-    });
+    popupEndTime = Date.now() + msec;
+    const delay = Math.min(msec, POPUP_CHECK_PERIOD);
+    setTimeout(checkClearPopup, delay);
+  } else {
+    // Nothing to do. Note that popup is never cleared, so caller
+    // is expected to call displayPopup again with a valid msec value.
   }
 }
 
@@ -517,6 +539,8 @@ function onLoadFunction() {
   restoreTVSetup();
 
   document.getElementById(ID_TV_SETUP).addEventListener('submit', saveTVSetup);
+
+  POPUP_TEXT_ELEMENT = document.getElementById(ID_POPUP_TEXT);
 
   // Tabs setup
   const tabLinks = document.getElementsByClassName(CLASS_TAB_LINK);
