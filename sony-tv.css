@@ -31,6 +31,8 @@ body {
   background: #ECECEC;
   margin: 20px 5px;
   color: #333;
+  max-width: 40em;
+  margin: 0 auto;
 }
 
 button {
@@ -73,6 +75,29 @@ button:hover {
 .tv-command:hover {
   background: #aca; /* For browsers that do not support gradients */
   background: linear-gradient(#aca, #afa);
+}
+
+/* Custom command sequence input box */
+#tv-command-input fieldset {
+  border-color: #eef;
+}
+
+#tv-command-input input {
+  font-size: 1.2em;
+  font-weight: bold;
+  width: 5em;
+  color: #00f;
+  background-color: #eef;
+}
+#tv-command-input legend {
+  color: #00f;
+}
+
+#tv-command-input button {
+  margin-top: 2px;
+  padding: 10px 0;
+  max-width: 6em;
+  width: 100%; /* reduce default width to fit in column */
 }
 
 /* Tabs */

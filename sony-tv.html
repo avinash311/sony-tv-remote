@@ -52,32 +52,40 @@
   <hr>
   <div class="tabs-all-content">
     <div class="tab-content" id="tab-buttons-content">
-      <!-- Volume -->
+      <!-- Frequently Used -->
       <div class="columns" id="tv-volume">
-        <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv.commands="VolumeUp">Vol <i>+</i> </button>
+        <div class="one-fourth-item">
+          <button type="button" class="tv-command" data-stv.commands="TvPower">ON &middot; OFF <i></i> </button>
         </div>
-        <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv.commands="VolumeDown">Vol <i>-</i> </button>
-        </div>
-        <div class="one-third-item">
+        <div class="one-fourth-item">
           <button type="button" class="tv-command" data-stv.commands="Mute">Muting</button>
         </div>
-      </div>
-      <hr>
-      <!-- Channels -->
-      <div class="columns" id="tv-channels">
-        <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv.commands="ChannelUp">CH <i>+</i> </button>
-        </div>
-        <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv.commands="ChannelDown">CH <i>-</i> </button>
-        </div>
-        <div class="one-third-item">
+        <div class="one-fourth-item">
           <button type="button" class="tv-command" data-stv.commands="Jump">Jump <i>&#x21B6;</i> </button>
         </div>
+        <div class="one-fourth-item">
+  <!-- Command input text box -->
+  <form id="tv-command-input">
+    <fieldset>
+      <legend>Type-in</legend>
+      <input type="text" id="tv-input-1" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="Ex: 7.1">
+      <br>
+      <button type="submit" class="tv-command">Send</button>
+    </fieldset>
+  </form>
+        </div>
       </div>
       <hr>
+      <!-- Command input text box
+      <form id="tv-command-input">
+        <fieldset>
+          <legend>Type-in Commands</legend>
+          <input type="text" id="tv-input-1" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="Example: 7.1">
+          <button type="submit" class="tv-command">Send</button>
+        </fieldset>
+      </form>
+      <hr>
+      -->
       <!-- Channel Numbers / Custom Buttons -->
       <!-- these child elements are dynamically created based on user setup options -->
       <div class="columns" id="tv-channel-numbers">
@@ -118,6 +126,32 @@
             <br>Normal <i>&#x21E3;</i>
             <br>Full <i>&#x21E3;</i>
             <br>Zoom <i>&#x21E3;</i> </button>
+        </div>
+      </div>
+      <hr>
+      <!-- Volume -->
+      <div class="columns" id="tv-volume">
+        <div class="one-third-item">
+          <button type="button" class="tv-command" data-stv.commands="VolumeUp">Vol <i>+</i> </button>
+        </div>
+        <div class="one-third-item">
+          <button type="button" class="tv-command" data-stv.commands="VolumeDown">Vol <i>-</i> </button>
+        </div>
+        <div class="one-third-item">
+          <button type="button" class="tv-command" data-stv.commands="Mute">Muting</button>
+        </div>
+      </div>
+      <hr>
+      <!-- Channels -->
+      <div class="columns" id="tv-channels">
+        <div class="one-third-item">
+          <button type="button" class="tv-command" data-stv.commands="ChannelUp">CH <i>+</i> </button>
+        </div>
+        <div class="one-third-item">
+          <button type="button" class="tv-command" data-stv.commands="ChannelDown">CH <i>-</i> </button>
+        </div>
+        <div class="one-third-item">
+          <button type="button" class="tv-command" data-stv.commands="Jump">Jump <i>&#x21B6;</i> </button>
         </div>
       </div>
       <hr>

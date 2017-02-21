@@ -74,6 +74,8 @@ const CLASS_TAB_CONTENT = 'tab-content'; // each tab content div (buttons, etc)
 const CLASS_TAB_LINK = 'tab-link'; // navigation bar for the tabs
 const CSS_TAB_LINK_ACTIVE = 'tab-color-active'; // css of active tab link
 const DATASET_COMMANDS = 'stv.commands'; // HTML attribute: data-stv.commands
+const ID_TV_COMMAND_INPUT = 'tv-command-input'; // form ID with text box
+const ID_TV_TEXT_COMMAND = 'tv-input-1'; // input text box for command entry
 
 // key names used to store data in (local storage or browser.storage)
 const STORE_TV_IP = 'SonyTVIP';
@@ -109,7 +111,7 @@ function sendCommand(command) {
 
     const code = commandToCode(command);
     if (!code) {
-      const message = 'Error: IRCC code found for command: ' + command;
+      const message = 'Error: IRCC code not found for command: "' + command + '"';
       console.error(message);
       reject(new Error(message));
       return;
@@ -415,29 +417,15 @@ function channelToCommands(number) {
 }
 
 // --------------------------------------------------------------------------------
-// Return the array of commands based on the button
-// While each button usually has a single command, it can be a sequence of
-// commands separated by space. Commands may be TV commands or channel numbers.
-function buttonToCommands(button) {
-  // HTML attribute: data-stv.commands="command [command ...]"
-  const buttonCommand = button.dataset[DATASET_COMMANDS];
-  return buttonCommand.split(WHITESPACE_RE);
-}
-
-// --------------------------------------------------------------------------------
-// Button click listener that executes the remote command or commands
-// this object here is a DOM object with dataset[DATASET_COMMANDS]
-function handleClick(e) {
-  e.preventDefault();
-  // command may be one or more commands (keys of the COMMAND_MAP) separated by space
-  const buttonCommands = buttonToCommands(this);
-
+// Given a array of commands, send the appropriate sequence to the TV
+// A command may be code word or a channel number
+function sendCommands(inputCommands) {
   // Create a flat list of all commands to be sent for this button
   const allCommands = [];
-  for (let bCommand of buttonCommands) {
-    // bCommand may be a single TV command or a channel number
-    const channelCommands = channelToCommands(bCommand);
-    const commands = channelCommands || [bCommand];
+  for (let command of inputCommands) {
+    // command may be a single TV command or a channel number
+    const channelCommands = channelToCommands(command);
+    const commands = channelCommands || [command];
     Array.prototype.push.apply(allCommands, commands);
   }
 
@@ -471,14 +459,46 @@ function handleClick(e) {
 }
 
 // --------------------------------------------------------------------------------
-// Connect all buttons to the command click handler.
-// This is not necessary, here just in case web page has buttons
-// and createChannelsButtons is never called.
-function setupButtonsOnClick() {
+// Return the array of commands based on the button
+// While each button usually has a single command, it can be a sequence of
+// commands separated by space. Commands may be TV commands or channel numbers.
+function buttonToCommands(button) {
+  // HTML attribute: data-stv.commands="command [command ...]"
+  const buttonCommand = button.dataset[DATASET_COMMANDS];
+  return buttonCommand ? buttonCommand.split(WHITESPACE_RE) : undefined;
+}
+
+// --------------------------------------------------------------------------------
+// Button click listener that executes the remote command or commands
+// this object here is a DOM object with dataset[DATASET_COMMANDS]
+function handleClick(e) {
+  e.preventDefault();
+  // command may be one or more commands (keys of the COMMAND_MAP) separated by space
+  const buttonCommands = buttonToCommands(this);
+  sendCommands(buttonCommands);
+}
+
+// --------------------------------------------------------------------------------
+// Connect all buttons (class tv-command) to the command click handler.
+function setupButtonsOnclick() {
   const buttons = document.getElementsByClassName(CLASS_TV_COMMAND);
   for (let button of buttons) {
-    button.onclick = handleClick;
+    // HTML attribute: data-stv.commands="command [command ...]"
+    // Only handles buttons with that attribute
+    const buttonCommands = buttonToCommands(button);
+    if (buttonCommands) {
+      button.onclick = handleClick;
+    }
   }
+}
+
+// --------------------------------------------------------------------------------
+// Send command from form text input box
+function textCommand(e) {
+  e.preventDefault();
+  const text = document.getElementById(ID_TV_TEXT_COMMAND).value;
+  const commands = text.split(WHITESPACE_RE);
+  sendCommands(commands);
 }
 
 // --------------------------------------------------------------------------------
@@ -526,7 +546,7 @@ function createChannelButtons(commandsString) {
   }
 
   // Connect all buttons to the click handler
-  setupButtonsOnClick();
+  setupButtonsOnclick();
 }
 
 // --------------------------------------------------------------------------------
@@ -539,6 +559,8 @@ function onLoadFunction() {
   restoreTVSetup();
 
   document.getElementById(ID_TV_SETUP).addEventListener('submit', saveTVSetup);
+  document.getElementById(ID_TV_COMMAND_INPUT).addEventListener('submit',
+    textCommand);
 
   POPUP_TEXT_ELEMENT = document.getElementById(ID_POPUP_TEXT);
 
