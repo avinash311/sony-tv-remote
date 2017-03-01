@@ -10,17 +10,17 @@
 
 .columns .one-fourth-item {
   flex-basis: 21%; /* 1/4 * (100 - margin-left*4 - margin-right*4) */
-  margin: 0.5em 2%; /* Add some space around left/right edges of each item */
+  margin: 5px 2px; /* Add some space around left/right edges of each item */
 }
 
 .columns .one-third-item {
   flex-basis: 29%; /* 1/3 * (100 - margin-left*3 - margin-right*3) */
-  margin: 0.5em 2%; /* Add some space around left/right edges of each item */
+  margin: 5px 2px; /* Add some space around left/right edges of each item */
 }
 
 .columns .one-half-item {
   flex-basis: 47%; /* 1/2 * (100 - margin-left*2 - margin-right*2) */
-  margin: 0.5em 2%; /* Add some space around left/right edges of each item */
+  margin: 5px 2px; /* Add some space around left/right edges of each item */
 }
 
 label textarea {
@@ -38,7 +38,6 @@ body {
 button {
   /* this also helps on narrow width displays when the buttons are stacked */
   display: inline-block;
-  font-size: 1.0em;
   text-decoration: none;
 }
 
@@ -58,7 +57,7 @@ button:hover {
   border-radius: 15px;
   padding: 20px 0;
   display: inline-block;
-  font-size: 1.1em;
+  font-size: 1.0em;
   font-weight: bold;
   text-decoration: none;
   /* this also helps on narrow width displays when the buttons are stacked */
@@ -82,8 +81,14 @@ button:hover {
   border-color: #eef;
 }
 
+/* override browser fieldset user agent stylesheet CSS rules */
+fieldset {
+  padding: 1px;
+  margin: 0px;
+}
+
 #tv-command-input input {
-  font-size: 1.2em;
+  font-size: 1.1em;
   font-weight: bold;
   width: 5em;
   color: #00f;
@@ -94,10 +99,9 @@ button:hover {
 }
 
 #tv-command-input button {
-  margin-top: 2px;
+  margin-top: 0px;
   padding: 10px 0;
   max-width: 6em;
-  width: 100%; /* reduce default width to fit in column */
 }
 
 /* Tabs */

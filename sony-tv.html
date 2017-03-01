@@ -63,17 +63,19 @@
         <div class="one-fourth-item">
           <button type="button" class="tv-command" data-stv.commands="Jump">Jump <i>&#x21B6;</i> </button>
         </div>
-        <div class="one-fourth-item">
-  <!-- Command input text box -->
-  <form id="tv-command-input">
-    <fieldset>
-      <legend>Type-in</legend>
-      <input type="text" id="tv-input-1" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="Ex: 7.1">
-      <br>
-      <button type="submit" class="tv-command">Send</button>
-    </fieldset>
-  </form>
-        </div>
+        <!-- Command input text box -->
+        <form id="tv-command-input">
+          <!-- put content one-fourth-item inside form otherwise fieldset border has too much
+               padding on right, and border around fieldset looks weird -->
+          <div class="one-fourth-item">
+            <fieldset>
+              <legend>Type-in</legend>
+              <input type="text" id="tv-input-1" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="Ex: 7.1">
+              <br>
+              <button type="submit" class="tv-command">Send</button>
+            </fieldset>
+          </div>
+        </form>
       </div>
       <hr>
       <!-- Command input text box
