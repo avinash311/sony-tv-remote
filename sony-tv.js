@@ -35,18 +35,18 @@ let SONY_TV_PRESHARED_KEY = '';
 // Default list of channels to show as quick-access channel command buttons
 // Format of each button is command-or-channel-number : button-name\n
 const DEFAULT_COMMAND_BUTTONS = `
-2.1 : PBS 2
-4.1 : CBS 4
-5.1 : ABC 5
-7.2 : this 7
-25.3 : LAFF
-27.1 : Uni 27
-38.1 : MyTV 38
-56.1 : CW 56
-62.3 : Works
-62.4 : Comet
-66.2 : Bounce
-66.4 : Esc
+2.1 Enter : PBS 2
+4.1 Enter : CBS 4
+5.1 Enter : ABC 5
+7.2 Enter : this 7
+25.3 Enter : LAFF
+27.1 Enter : Uni 27
+38.1 Enter : MyTV 38
+56.1 Enter : CW 56
+62.3 Enter : Charge
+62.4 Enter : Comet
+66.2 Enter : Bounce
+66.4 Enter : Esc
 `;
 // While console.log, warn, etc are used liberally, messages to the user
 // are limited by MESSAGE_LEVEL setting. These are messages displayed in

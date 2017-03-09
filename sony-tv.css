@@ -31,8 +31,12 @@ body {
   background: #ECECEC;
   margin: 20px 5px;
   color: #333;
-  max-width: 40em;
+  max-width: 35em;
   margin: 0 auto;
+}
+
+#tab-buttons-content {
+  margin-left: 3px;
 }
 
 button {
