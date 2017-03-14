@@ -199,7 +199,7 @@
     <div class="tab-content" id="tab-help-content">
       <h2>About</h2>
       <h3>Sony TV Web Page Remote Control</h3>
-      <p> Version: <span id="about-version">1.2</span>
+      <p> Version: <span id="about-version">1.3</span>
       <br>Homepage: <a href="http://www.aczoom.com/tech/sony-tv-remote/">aczoom.com/tech/sony-tv-remote/</a> </p>
 
       <h2>Help</h2>
@@ -217,16 +217,19 @@
       <p>If the TV IP address is not fixed, give your TV a static IP address or make a DHCP reservation for a specific IP address in your router.</p>
       <p>Enter the list of over-the-air channels or TV commands you want direct access to on the
         <code>Buttons</code> tab.
-        <br> This will create a button for each channel or command.
+        <br> This will create a button for each command string. Individual command names
+        can be found by querying the TV, see the section <a href="#tv-commands">TV commands</a>
+        in this document.
         <br> Each button should be defined on a single line. Example format is: </p> <pre>
-2.1 : PBS 2
-4.1 : CBS 4
-4.1 : CBS 4
-Netflix : Netflix
+2.1 Enter : PBS 2
+4.1 Enter : CBS 4
+4.1 Enter : CBS 4
+Netflix Confirm : Netflix
+TvInput Confirm : TV
 ...
         </pre>
-        <p>Where the <code> : </code> (space colon space) separates the TV commands or channel
-        number from the button name.<br>
+        <p>Where the <code> : </code> (space colon space) separates the TV commands
+        number from the button name. A channel number can also be used as a command.<br>
         <br> This will create a button for each channel or command.</p>
       <p>After all data is entered, click Save.
         <br> Once that is done, the buttons on the page can be used to send commands.</p>
@@ -264,15 +267,19 @@ Netflix : Netflix
         Then load the <code>sony-tv.html</code> in your browser (Firefox or Chrome only).</p>
       <p>For additional details, visit the home page and the source codes, available at:
         <br> Browse source code online: <a href="https://github.com/avinash311/sony-tv-remote">Sony TV Web Page Remote source code</a>
-
+        </p>
+      <a name="tv-commands">
       <h3>TV Info (Commands)</h3>
-      <p>Here's a way to see all the IRCC codes supported by the TV. There is usually no need to do
-        this since it seems all Sony Bravia TVs return the same set of codes. This can be used to
+      </a>
+      <p>Here's a way to see all the Command names and IRCC codes supported by the TV.
+        It seems all Sony Bravia TVs return the same set of codes. This can be used to
         confirm it, if needed by comparing this output to the COMMAND_MAP Javascript variable in the
         code. This button works even if the TV is off (as long as it is plugged in). The entries
         such as <code>{"name":"Hdmi2","value":"AAAAAgAAABoAAABbAw=="}</code> show the command name
         and the value which indicates the IRCC code.
         </p>
+      <p>In addition the commands here, this interface also accepts channel numbers as commands
+      such as <em>38.1</em> and such.</p>
       <div id="controller-info">
         <button type="button" id="controller-info-button">Get TV Remote Controller Info</button>
         <div id="controller-info-output">(Remote Controller Info will show up here.)</div>
