@@ -46,7 +46,7 @@ const DEFAULT_COMMAND_BUTTONS = `
 62.3 Enter : Charge
 62.4 Enter : Comet
 66.2 Enter : Bounce
-66.4 Enter : Esc
+66.4 Enter : Grit
 `;
 // While console.log, warn, etc are used liberally, messages to the user
 // are limited by MESSAGE_LEVEL setting. These are messages displayed in
