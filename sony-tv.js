@@ -39,14 +39,14 @@ const DEFAULT_COMMAND_BUTTONS = `
 4.1 Enter : CBS 4
 5.1 Enter : ABC 5
 7.2 Enter : this 7
+15.2 Enter : Cozi
 25.3 Enter : LAFF
 27.1 Enter : Uni 27
 38.1 Enter : MyTV 38
+38.3 Enter : Comet
 56.1 Enter : CW 56
-62.3 Enter : Charge
-62.4 Enter : Comet
+58.1 Enter : IonLife
 66.2 Enter : Bounce
-66.4 Enter : Grit
 `;
 // While console.log, warn, etc are used liberally, messages to the user
 // are limited by MESSAGE_LEVEL setting. These are messages displayed in
