@@ -2,8 +2,9 @@
      Sony TV Web Page Remote
      Uses Sony Bravia TV IRCC (IR like control commands) sent using HTTP POST.
 
-     Works on Chrome as well as Firefox.
-     Does not work on Microsoft Edge (localStorage, for of loop, etc)
+     Works on Chrome, Firefox, Edge.
+     Requires Javascript ES2015 (ES6). Works with most browsers in 2020.
+     Uses localStorage, for of loop, etc.
 
      This script runs along with a web page that displays all the commands
      to send.
@@ -18,12 +19,16 @@
      2: Load this as a Web Extension which asks for permissions to access
      remote URLs, so avoids cross origin policy cross-domain restrictions.
 
-     Requires Javascript ES2015 (ES6). Works with most browsers in 2017.
-
      There are a number of similar tools available - from command line
      scripts to server side Javascript. Use a web search such as "Sony
      TV IRCC" to find references. Example:
      http://www.openremote.org/display/forums/Sony+TV+HTTP+control?focusedCommentId=23601972#comment-23601972
+
+     Note that the On button from this web page will only work if the TV is
+     not on extreme power savings standby which terminates web server on TV.
+     Javascript cannot send Wake-On-Lan WOL message required to turn on the
+     TV Web Server. To use On button, turn off Eco or Power Saving mode or
+     always use physical remote or other app to turn on TV.
 */
 
 'use strict';
