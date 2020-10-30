@@ -31,10 +31,10 @@
      2: Load this as a Web Extension which asks for permissions to access
      remote URLs, so avoids cross origin policy cross-domain restrictions.
 
-     Works on Chrome as well as Firefox.
-     Does not work on Microsoft Edge (localStorage, for of loop, etc)
+     Works on Chrome, Firefox, Edge.
 
-     Requires Javascript ES2015 (ES6). Works with most browsers in 2017.
+     Requires Javascript ES2015 (ES6). Works with most browsers in 2020.
+     Uses localStorage, for of loop, etc.
 
      There are a number of similar tools available - from command line
      scripts to server side Javascript. Use a web search such as "Sony
@@ -209,16 +209,19 @@
     <div class="tab-content" id="tab-help-content">
       <h2>About</h2>
       <h3>Sony TV Web Page Remote Control</h3>
-      <p> Version: <span id="about-version">1.3</span>
+      <p> Version: <span id="about-version">1.4 (2020-Oct)</span>
       <br>Homepage: <a href="http://www.aczoom.com/tech/sony-tv-remote/">aczoom.com/tech/sony-tv-remote/</a> </p>
 
       <h2>Help</h2>
       <p>For details on how this works, the best choice is looking at the source code: <a href="https://github.com/avinash311/sony-tv-remote">Sony TV Web Page Remote source code</a>.
-        <br>(<em>This has only been tested on Firefox and Chrome. It does not work on Microsoft Edge which does not support the standard Javascript code used here</em>.)</p>
       <p>Using this requires the TV to support IRCC control
         (Sony Bravia TV IR (infrared)-like-control-commands), have a fixed IP
         address, and allow remote access using a pre-shared key.
         <br> 2016 or later Sony Bravia TVs should all have this support. </p>
+      <p>Power On from this page will only work if the TV Power Eco mode
+        allows it. The Bravia TV Settings for Power can be changed if needed.
+	Otherwise, use the physical remote to turn on the TV and then all
+	these web commands will work.</p>
       <h3>Setup</h3>
         <p>Click on the <code>Setup</code> tab and fill in all the fields in there.</p>
         <p>Do this using the TV: Set pre-shared key on your TV:
@@ -268,6 +271,13 @@ TvInput Confirm : TV
         <br> The web browser can be on a computer, a smartphone, or a tablet.
          <a href="http://www.aczoom.com/tools/sony-tv-remote/sony-tv.html">online
            Sony TV Web Remote at aczoom.com</a>.</p>
+      <p> If the On button is not working from this web page, it indicates that the TV
+        has some power saving mode set. In this case, change the [Settings] [Power] Eco
+	mode using the TV remote.
+	Or always use the physical remote to turn on the TV.
+        <br> See this message thread for the issue related to WOL messages:
+         <a href="https://github.com/avinash311/sony-tv-remote/issues/1">TVPower
+           does not work</a>.</p>
       <p>If more customization of the Buttons page is needed, the entire source code
         for this package is available for local download and editing. This may be useful
         if you wish to hardcode the Setup details on the web page, so everyone in your
