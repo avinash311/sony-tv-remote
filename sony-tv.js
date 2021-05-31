@@ -42,17 +42,30 @@ let SONY_TV_PRESHARED_KEY = '';
 const DEFAULT_COMMAND_BUTTONS = `
 2.1 Enter : PBS 2
 4.1 Enter : CBS 4
+4.2 Enter : startTV
+4.3 Enter : dabl
 5.1 Enter : ABC 5
+5.2 Enter : MeTV
+7.1 Enter : 7 News
 7.2 Enter : this 7
+15.1 Enter : NBC
 15.2 Enter : Cozi
+15.3 Enter : LX
+25.2 Enter : CourtTV
 25.3 Enter : LAFF
 27.1 Enter : Uni 27
 38.1 Enter : MyTV 38
+38.2 Enter : H&I
 38.3 Enter : Comet
+44.1 Enter : PBS 44
+44.3 Enter : Create
 56.1 Enter : CW 56
-58.1 Enter : IonLife
+58.1 Enter : ionPlus
 66.2 Enter : Bounce
-`;
+66.3 Enter : getTV
+68.1 Enter : Ion
+`
+;
 // While console.log, warn, etc are used liberally, messages to the user
 // are limited by MESSAGE_LEVEL setting. These are messages displayed in
 // a popup (temporarily) div on the page.
