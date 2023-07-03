@@ -149,9 +149,12 @@ ul.tabs-navigation {
 }
 
 /* GetRemoteControllerInfo command and output */
-#controller-info {
+#getApplicationList-info, #controller-info {
   padding: 10px 20px;
   border: 1px solid black;
+}
+#rest-service-output {
+  background: #ECECEC;
 }
 
 /* Popup to provide feedback after a click */

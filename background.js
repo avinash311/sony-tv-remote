@@ -8,6 +8,8 @@
      installed manually by the end-user.
 
      Requires Javascript 2016.
+     2023: May not work anymore. Also not needed - using file:// in the same
+     subnet of the TV works fine and the main sony-tv.js and .html work.
 */
 
 /* Open a new tab, and load "my-page.html" into it.  */

@@ -37,6 +37,9 @@ That is the basic mechanism used by this web page Javascript code.
 
 The Sony TVs also send correct cross-origin resource sharing (CORS) headers, which allows this web page Javascript to send a POST message to the TV.
 
+2023: Added support for REST API JSON RPC commands. They can be manually entered
+as JSON strings in the REST API tab of the web page.
+
 ### Use as a web page
 
 This is the easiest way to use this tool.

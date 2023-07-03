@@ -35,6 +35,9 @@
 
      Requires Javascript ES2015 (ES6). Works with most browsers in 2020.
      Uses localStorage, for of loop, etc.
+     2023: Added REST API tab to allow use of JSON RPC commands. Requires
+     manually entering JSON strings as described in the Sony guides:
+     https://pro-bravia.sony.net/develop/integrate/rest-api/spec/index.html
 
      There are a number of similar tools available - from command line
      scripts to server side Javascript. Use a web search such as "Sony
@@ -46,6 +49,7 @@
     <li class="tab-link" id="tab-buttons-link"><a>Buttons</a> </li>
     <li class="tab-link" id="tab-setup-link"><a>Setup</a> </li>
     <li class="tab-link" id="tab-help-link"><a>Help</a> </li>
+    <li class="tab-link" id="tab-restapi-link"><a>REST API</a> </li>
   </ul>
   <!-- display error/status messages on a popup, usually centered on browser page using css -->
   <div class="popup-text hide-initial" id="popup-text">Sony TV Remote Control</div>
@@ -193,9 +197,9 @@
             <input type="text" id="tv-key" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="Enter TV Pre-Shared Key"> </p>
           <hr>
           <p>
-          <label for="make-custom-buttons">Create buttons for these commands/channels:
-            <textarea id="make-custom-buttons" autocorrect="off" autocapitalize="none" spellcheck="false" rows="14"></textarea>
-          </label> </p>
+          <label for="make-custom-buttons">Create buttons for these commands/channels:</label>
+          <textarea id="make-custom-buttons" autocorrect="off" autocapitalize="none" spellcheck="false" rows="14"></textarea>
+          </p>
           <hr>
           <button type="submit">Save</button>
           <p>Data is saved locally on this browser.</p>
@@ -209,7 +213,7 @@
     <div class="tab-content" id="tab-help-content">
       <h2>About</h2>
       <h3>Sony TV Web Page Remote Control</h3>
-      <p> Version: <span id="about-version">1.4 (2020-Oct)</span>
+      <p> Version: <span id="about-version">2.0 (2023-Jul)</span>
       <br>Homepage: <a href="http://www.aczoom.com/tech/sony-tv-remote/">aczoom.com/tech/sony-tv-remote/</a> </p>
 
       <h2>Help</h2>
@@ -299,12 +303,64 @@ TvInput Confirm : TV
         and the value which indicates the IRCC code.
         </p>
       <p>In addition the commands here, this interface also accepts channel numbers as commands
-      such as <em>38.1</em> and such.</p>
+      suce as <em>38.1</em> and such.</p>
       <div id="controller-info">
         <button type="button" id="controller-info-button">Get TV Remote Controller Info</button>
         <div id="controller-info-output">(Remote Controller Info will show up here.)</div>
       </div>
     </div> <!-- tab-help-content -->
+    <!-- REST API JSON RPC IP Control Help and Commands -->
+    <hr>
+    <div class="tab-content" id="tab-restapi-content">
+      <h2>REST API JSON RPC</h2>
+      <p>This section uses the REST API using JSON RPC as described here <a href="https://pro-bravia.sony.net/develop/integrate/rest-api/spec/index.html">Sony TV Knowledge Center REST API</a>.
+      <p>REST API JSON RPC supports a different set of commands from what is supported by
+      the IRCC-IP (remote control) commands.
+      </p>
+      <form id="rest-service-form">
+        <fieldset>
+          <legend><h3>Call a service</h3></legend>
+          <p>
+            <label for="rest-service">Name:</label>
+            <select name="Service" id="rest-service" required="true">
+              <option value="appControl" selected="true">appControl</option>
+              <option value="audio">audio</option>
+              <option value="avContent">avContent</option>
+              <option value="encryption">encryption</option>
+              <option value="guide">guide</option>
+              <option value="system">system</option>
+              <option value="videoScreen">videoScreen</option>
+            </select>
+          <p>
+          <label for="rest-json">JSON:</label>
+            <textarea id="rest-json" autocorrect="off" autocapitalize="none" spellcheck="false" rows="7" cols="72"></textarea>
+          </p>
+          <button type="submit">Send</button>
+          <p>
+          <label for="rest-service-output">TV API output:</label>
+          <textarea id="rest-service-output" autocorrect="off" autocapitalize="none" spellcheck="false" rows="3" cols="72" readonly="true"></textarea>
+          </p>
+        </fieldset>
+      </form>
+      <p>Example API call - gets the time on the TV. Select the service name <strong><em>system</em></strong>
+      and copy and paste this JSON data in the form:
+      <br/>
+      <textarea readonly="true" style="resize: none;" rows="1" cols="72">{ "method": "getCurrentTime", "id": 51, "params": [], "version": "1.1" }</textarea>
+      </p>
+
+      <hr>
+      <h3>Call getApplicationList</h3>
+      </a>
+      <div id="getApplicationList-info">
+        <button type="button" id="getApplicationList-button">getApplicationList</button>
+      </div>
+      <div id="getApplicationList-output">(getApplicationList output will show up here.)</div>
+
+      <h3>Setup</h3>
+      <p>Follow the Help page instructions to setup the IP address and pre-auth key.
+        It also describes troubleshooting tips - primarily by looking at
+        Javascript console messages.</p>
+    </div> <!-- tab-restapi-content -->
   </div> <!-- tabs-all-content -->
   <hr>
   <!-- End Document =============================================== -->

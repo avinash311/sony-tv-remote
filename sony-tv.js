@@ -12,7 +12,7 @@
      it MAY run afoul of same origin policy restrictions. But there seem to be
      edge conditions if the web page is saved locally and accessed using
      file:// URL which then uses Javascript to POST to http:// URL, it works
-     fine in latest Chrome, Firefox (Jan 2017).
+     fine in latest Chrome, Firefox (Jan 2017, Jul 2023).
      In any case, if that fails, here are the options:
      1: Change this script to use node.js or server side scripting which
      does not run afoul of same origin policy.
@@ -21,8 +21,14 @@
 
      There are a number of similar tools available - from command line
      scripts to server side Javascript. Use a web search such as "Sony
-     TV IRCC" to find references. Example:
-     http://www.openremote.org/display/forums/Sony+TV+HTTP+control?focusedCommentId=23601972#comment-23601972
+     TV IRCC" to find references.
+     Sony has a IP Control knowledge center also:
+     https://pro-bravia.sony.net/develop/integrate/ip-control/index.html
+     There are multiple ways of IP control. This code is primarily for IRCC-IP
+     which mimics all remote control commands.
+     There is also REST API JSON RPC which supports a different set of commands.
+     2023: See the REST API tab in this code's HTML page for example usage of
+     those APIs.
 
      Note that the On button from this web page will only work if the TV is
      not on extreme power savings standby which terminates web server on TV.
@@ -191,11 +197,13 @@ function sendCommand(command) {
 }
 
 // --------------------------------------------------------------------------------
-// Get the list of commands supported by the TV. This only needs the URL,
-// no need to send the TV Pre-Shared Key. Send this as a JSON command.
-// Returns a Promise object that resolves on a succeful POST response.
-// Equivalant to: curl --silent -XPOST http://$SonyBraviaIP/sony/system -d '{"method":"getRemoteControllerInfo","params":[],"id":10,"version":"1.0"}'  | python -m json.tool
-function getRemoteControllerInfo(controllerOutputDiv) {
+// Generic function for REST API with JSON-RPC over HTTP
+// https://pro-bravia.sony.net/develop/integrate/rest-api/spec/index.html
+// This is different from the IRCC-IP which supports remote control buttons
+// Returns a Promise object that resolves on a successful POST response.
+function callRestApi(service, json) {
+  // Example service = 'appControl';
+  // Example json = '{"method":"getApplicationList","params":[],"id":60,"version":"1.0"}';
   return new Promise(function(resolve, reject) {
     if (SONY_TV_IP == '') {
       const message = 'Error: No Sony TV IP setup yet.';
@@ -204,18 +212,20 @@ function getRemoteControllerInfo(controllerOutputDiv) {
       return;
     }
     const req = new XMLHttpRequest();
-    const tv_url = SONY_TV_URL_PREFIX + SONY_TV_IP + '/sony/system' ;
+    const tv_url = SONY_TV_URL_PREFIX + SONY_TV_IP + '/sony/' + service;
     req.open('POST', tv_url, true);
-    req.setRequestHeader('Content-Type', 'text/xml; charset=UTF-8');
+    req.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+    req.setRequestHeader('X-Auth-PSK', SONY_TV_PRESHARED_KEY);
+
     req.timeout = 3000; // in milliseconds
 
     req.onreadystatechange = function() {
       if (req.readyState == 4) { // XMLHttpRequest.DONE
         if (req.status == 200) {
-          // console.log('POST response received for: ' + command + ' ' + code);
+          // console.log('POST response received for: ' + tv_url);
           resolve(req.responseText);
         } else {
-          const message = 'Failed to get TV info (Status '
+          const message = 'Failed REST API (Status '
             + req.status + '): ' + tv_url
             + ' (Response: "' + req.responseText + '")';
           console.error(message);
@@ -224,9 +234,8 @@ function getRemoteControllerInfo(controllerOutputDiv) {
       }
     }
 
-    const data = '{"method":"getRemoteControllerInfo","params":[],"id":10,"version":"1.0"}';
-    req.send(data);
-    console.log('Sent POST to get TV commands');
+    req.send(json);
+    console.log('Sent REST API service ' + service);
   });
 }
 
@@ -598,19 +607,6 @@ function onLoadFunction() {
     openTab(document.getElementById('tab-buttons-link'));
   }
 
-  // Help page has a button to query TV for list of IRCC codes it knows about
-  const controller = document.getElementById('controller-info-button');
-  const controllerOutput = document.getElementById('controller-info-output');
-  if (controller && controllerOutput) {
-    controller.onclick = () => {
-      getRemoteControllerInfo().then((responseText) => {
-        controllerOutput.textContent = responseText;
-      }).catch((err) => {
-        displayPopup(err.message, LEVEL_ERROR, ERROR_MESSAGE_TIME);
-      });
-    }
-  }
-
   // Help page has a version field, fill it in.
   if (typeof browser != 'undefined') {
     // Only do this if we are running as an extension, and not loading
@@ -618,6 +614,45 @@ function onLoadFunction() {
     const manifest = browser.runtime.getManifest();
     const element = document.getElementById('about-version');
     element.textContent = manifest.version;
+  }
+
+  // Get the list of commands supported by the TV.
+  // Help page has a button to query TV for list of IRCC codes it knows about
+  // This requires using the REST API JSON RPC
+  // Equivalant to: curl --silent -XPOST http://$SonyBraviaIP/sony/system -d '{"method":"getRemoteControllerInfo","params":[],"id":10,"version":"1.0"}'  | python -m json.tool
+
+  const controller = document.getElementById('controller-info-button');
+  const controllerOutput = document.getElementById('controller-info-output');
+  if (controller && controllerOutput) {
+    controller.onclick = () => {
+      callRestApi('system',
+        '{"method":"getRemoteControllerInfo","params":[],"id":10,"version":"1.0"}')
+      .then((responseText) => {
+        controllerOutput.textContent = responseText;
+      }).catch((err) => {
+        displayPopup(err.message, LEVEL_ERROR, ERROR_MESSAGE_TIME);
+      });
+    }
+  }
+
+  // ===========
+  // REST API JSON RPC support
+  document.getElementById("rest-service-form").addEventListener('submit',
+      callRestServiceForm);
+
+  // REST API getApplicationList call and output
+  const getAppList = document.getElementById('getApplicationList-button');
+  const getAppListOutput = document.getElementById('getApplicationList-output');
+  if (getAppList && getAppListOutput) {
+    getAppList.onclick = () => {
+        callRestApi('appControl',
+            '{"method":"getApplicationList","params":[],"id":60,"version":"1.0"}')
+            .then((responseText) => {
+        getAppListOutput.textContent = responseText;
+      }).catch((err) => {
+        displayPopup(err.message, LEVEL_ERROR, ERROR_MESSAGE_TIME);
+      });
+    }
   }
 }
 
@@ -675,6 +710,20 @@ function openTab(tabLink) {
   }
   tabLink.className += replaceClass;
   window.scrollTo(0, 0); // Jump to top of page
+}
+
+// --------------------------------------------------------------------------------
+// REST API JSON RPC support
+function callRestServiceForm (e) {
+  e.preventDefault();
+  const service = document.getElementById("rest-service").value;
+  const json = document.getElementById("rest-json").value;
+  const output = document.getElementById("rest-service-output");
+  callRestApi(service, json).then((responseText) => {
+        output.textContent = responseText;
+      }).catch((err) => {
+        displayPopup(err.message, LEVEL_ERROR, ERROR_MESSAGE_TIME);
+      });
 }
 
 // --------------------------------------------------------------------------------
