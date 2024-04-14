@@ -46,27 +46,23 @@ let SONY_TV_PRESHARED_KEY = '';
 // Default list of channels to show as quick-access channel command buttons
 // Format of each button is command-or-channel-number : button-name\n
 const DEFAULT_COMMAND_BUTTONS = `
-2.1 Enter : PBS 2
 4.1 Enter : CBS 4
-4.2 Enter : startTV
-4.3 Enter : dabl
-5.1 Enter : ABC 5
-5.2 Enter : MeTV
+4.3 Enter : dabl 4.3
+4.5 Enter : Catchy
+5.2 Enter : MeTV 5.2
 7.1 Enter : 7 News
 7.2 Enter : this 7
 15.1 Enter : NBC
 15.2 Enter : Cozi
-15.3 Enter : LX
-25.2 Enter : CourtTV
+25.2 Enter : Comet
 25.3 Enter : LAFF
 27.1 Enter : Uni 27
 38.1 Enter : MyTV 38
 38.2 Enter : H&I
-38.3 Enter : Comet
+38.5 Enter : Movies
 44.1 Enter : PBS 44
-44.3 Enter : Create
 56.1 Enter : CW 56
-58.1 Enter : ionPlus
+58.1 Enter : grit 58
 66.2 Enter : Bounce
 66.3 Enter : getTV
 68.1 Enter : Ion
@@ -235,7 +231,7 @@ function callRestApi(service, json) {
     }
 
     req.send(json);
-    console.log('Sent REST API service ' + service);
+    console.log('Sent REST service: ' + service + ' ' + json);
   });
 }
 
@@ -640,19 +636,25 @@ function onLoadFunction() {
   document.getElementById("rest-service-form").addEventListener('submit',
       callRestServiceForm);
 
-  // REST API getApplicationList call and output
+  {
+  // Pre-built commands: REST API getApplicationList call and output
   const getAppList = document.getElementById('getApplicationList-button');
-  const getAppListOutput = document.getElementById('getApplicationList-output');
-  if (getAppList && getAppListOutput) {
-    getAppList.onclick = () => {
-        callRestApi('appControl',
-            '{"method":"getApplicationList","params":[],"id":60,"version":"1.0"}')
-            .then((responseText) => {
-        getAppListOutput.textContent = responseText;
-      }).catch((err) => {
-        displayPopup(err.message, LEVEL_ERROR, ERROR_MESSAGE_TIME);
-      });
-    }
+  const getAppListJson = '{"method":"getApplicationList","params":[],"id":60,"version":"1.0"}';
+  connectRestAPIButton(getAppList, 'appControl', getAppListJson);
+  }
+
+  {
+  // Pre-built commands: REST API getCurrentTime call and output
+  const currentTimeButton = document.getElementById('getCurrentTime-button');
+  const currentTimeJson = '{"method": "getCurrentTime","params": [],"id": 51,"version": "1.1"}';
+  connectRestAPIButton(currentTimeButton, 'system', currentTimeJson);
+  }
+
+  {
+  // Pre-built commands: REST API requestReboot call and output
+  const rebootJson = '{"method": "requestReboot","params": [],"id": 10,"version":"1.0"}';
+  connectRestAPIButton(document.getElementById('reboot-button1'), 'system', rebootJson);
+  connectRestAPIButton(document.getElementById('reboot-button2'), 'system', rebootJson);
   }
 }
 
@@ -721,9 +723,30 @@ function callRestServiceForm (e) {
   const output = document.getElementById("rest-service-output");
   callRestApi(service, json).then((responseText) => {
         output.textContent = responseText;
+        output.value = responseText; // for firefox
       }).catch((err) => {
         displayPopup(err.message, LEVEL_ERROR, ERROR_MESSAGE_TIME);
       });
+}
+
+// Connect a button to given REST API service + json
+function connectRestAPIButton (controller, service, json) {
+  const serviceElement = document.getElementById("rest-service");
+  const jsonElement = document.getElementById("rest-json");
+  const output = document.getElementById("rest-service-output");
+  controller.onclick = () => {
+    // Update web page to show this API call parameters
+    serviceElement.value = service;
+    jsonElement.textContent = json;
+    // textArea in firefox does not work with .textContent so use .value
+    jsonElement.value = json;
+    // Make the call
+    callRestApi(service, json).then((responseText) => {
+        output.value = responseText;
+      }).catch((err) => {
+        displayPopup(err.message, LEVEL_ERROR, ERROR_MESSAGE_TIME);
+      });
+  }
 }
 
 // --------------------------------------------------------------------------------

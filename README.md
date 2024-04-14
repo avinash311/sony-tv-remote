@@ -11,7 +11,12 @@ It provides quick access to some often used commands such as Muting, entering al
 
 The web page has a setup that allows for creating custom buttons to send your own commands to the TV, and it comes bundled with some fixed commands (such as Mute, Volume Up and Down, Power On/Off, etc).
 
-It can be used on any device that can access both the web remote control page and the TV to be controlled.
+The page supports both IRCC and REST API commands. Most commonly used buttons are on the main
+page and use IRCC codes similar to a physical remote control.
+The REST API tab may be useful for access to the Reboot command for which there is not direct
+IRCC code.
+
+This can be used on any device that can access both the web remote control page and the TV to be controlled.
 On smartphones (or desktop too), it is also possible to create a Home Screen shortcut to the web page which allows for quick access to the remote control.
 
 Sony does provide a smartphone app with similar controls and far more capability, but it is very slow to startup and has too many additional features that make it more complex to use.

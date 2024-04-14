@@ -10,7 +10,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="sony-tv.css">
   <link rel="icon" type="image/png" href="images/tv-icon-128.png"> </head>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <body>
   <h1>Sony TV Remote</h1>
   <!-- =================================================================
@@ -46,10 +45,10 @@
   <ul class="tabs-navigation">
     <!-- id of links must be same id as tab, with -link replaced by -content.
          Ex: tab-buttons-link and tab-buttons-content -->
-    <li class="tab-link" id="tab-buttons-link"><a>Buttons</a> </li>
+    <li class="tab-link" id="tab-buttons-link"><a>Buttons IRCC</a> </li>
+    <li class="tab-link" id="tab-restapi-link"><a>Buttons REST</a> </li>
     <li class="tab-link" id="tab-setup-link"><a>Setup</a> </li>
     <li class="tab-link" id="tab-help-link"><a>Help</a> </li>
-    <li class="tab-link" id="tab-restapi-link"><a>REST API</a> </li>
   </ul>
   <!-- display error/status messages on a popup, usually centered on browser page using css -->
   <div class="popup-text hide-initial" id="popup-text">Sony TV Remote Control</div>
@@ -113,8 +112,9 @@
       </div>
       <hr>
       <!-- Display aspect ratio -->
+      <!-- these won't work unless a long 0.5 sec or so delay is sent between Up/Down commands -->
+      <!-- No longer used so remove buttons from web page
       <div class="columns" id="tv-display-ratio">
-        <!-- these won't work unless a long 0.5 sec or so delay is sent between Up/Down commands -->
         <div class="one-fourth-item">
           <button type="button" class="tv-command" data-stv.commands="Wide Up Up Up Return">Wide&nbsp;Zoom <i></i> </button>
         </div>
@@ -129,61 +129,58 @@
         </div>
       </div>
       <hr>
-      <!-- Volume -->
-      <div class="columns" id="tv-volume">
-        <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv.commands="VolumeUp">Vol <i>+</i> </button>
-        </div>
-        <div class="one-third-item">
+      -->
+      <!-- Volume and Channel Increment -->
+      <div class="columns" id="tv-volume-channel">
+        <div class="one-fourth-item">
           <button type="button" class="tv-command" data-stv.commands="VolumeDown">Vol <i>-</i> </button>
         </div>
-        <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv.commands="Mute">Muting</button>
+        <div class="one-fourth-item">
+          <button type="button" class="tv-command" data-stv.commands="VolumeUp">Vol <i>+</i> </button>
+        </div>
+        <div class="one-fourth-item">
+          <button type="button" class="tv-command" data-stv.commands="ChannelDown">CH <i>-</i> </button>
+        </div>
+        <div class="one-fourth-item">
+          <button type="button" class="tv-command" data-stv.commands="ChannelUp">CH <i>+</i> </button>
         </div>
       </div>
       <hr>
-      <!-- Channels -->
-      <div class="columns" id="tv-channels">
-        <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv.commands="ChannelUp">CH <i>+</i> </button>
+      <!-- Mute Off Reboot  -->
+      <div class="columns" id="tv-off">
+        <div class="one-fourth-item">
+          <button type="button" class="tv-command" data-stv.commands="PowerOff">OFF <i>&#x2B58;</i> </button>
         </div>
-        <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv.commands="ChannelDown">CH <i>-</i> </button>
+        <div class="one-fourth-item">
+          <button type="button" class="tv-command" data-stv.commands="Mute">Muting</button>
         </div>
-        <div class="one-third-item">
+        <div class="one-fourth-item">
           <button type="button" class="tv-command" data-stv.commands="Jump">Jump <i>&#x21B6;</i> </button>
+        </div>
+        <div class="one-fourth-item">
+          <button type="button" class="rest-command" id="reboot-button1">Reboot</button>
         </div>
       </div>
       <hr>
       <!-- Fast forward, rewind -->
       <div class="columns" id="tv-ffrw">
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="Pause"><i class="material-icons">pause</i></button>
+          <button type="button" class="tv-command" data-stv.commands="Pause" title="Pause"><i>Pause &#x23F8;</i></button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="Rewind"><i class="material-icons">fast_rewind</i></button>
+          <button type="button" class="tv-command" data-stv.commands="Rewind" title="Rewind"><i>&#x23EA; Rewind</i></button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="Play"><i class="material-icons">play_arrow</i></button>
+          <button type="button" class="tv-command" data-stv.commands="Play" title="Play"><i>Play &#x23F5;</i></button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="Forward"><i class="material-icons">fast_forward</i></button>
+          <button type="button" class="tv-command" data-stv.commands="Forward" title="Forward"><i>Forward &#x23E9;</i></button>
         </div>
       </div>
       <hr>
-      <!-- Power -->
-      <div class="columns" id="tv-power">
-        <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv.commands="TvPower">ON &middot; OFF <i></i> </button>
-        </div>
-        <div class="one-third-item">
-          <button type="button" class="tv-command" data-stv.commands="PowerOff">OFF <i>&#x2B58;</i> </button>
-        </div>
-      </div>
     </div>
     <!-- tab-buttons-content -->
     <!-- Setup -->
-    <hr>
     <div class="tab-content" id="tab-setup-content">
       <h2>TV Setup</h2>
       <form id="tv-setup">
@@ -209,11 +206,10 @@
       <!-- Javascript error or status message -->
     </div>
     <!-- Help and About -->
-    <hr>
     <div class="tab-content" id="tab-help-content">
       <h2>About</h2>
       <h3>Sony TV Web Page Remote Control</h3>
-      <p> Version: <span id="about-version">2.0 (2023-Jul)</span>
+      <p> Version: <span id="about-version">2.1 (2024-April)</span>
       <br>Homepage: <a href="http://www.aczoom.com/tech/sony-tv-remote/">aczoom.com/tech/sony-tv-remote/</a> </p>
 
       <h2>Help</h2>
@@ -310,17 +306,26 @@ TvInput Confirm : TV
       </div>
     </div> <!-- tab-help-content -->
     <!-- REST API JSON RPC IP Control Help and Commands -->
-    <hr>
     <div class="tab-content" id="tab-restapi-content">
       <h2>REST API JSON RPC</h2>
       <p>This section uses the REST API using JSON RPC as described here <a href="https://pro-bravia.sony.net/develop/integrate/rest-api/spec/index.html">Sony TV Knowledge Center REST API</a>.
-      <p>REST API JSON RPC supports a different set of commands from what is supported by
-      the IRCC-IP (remote control) commands.
+      <p>REST API supports a different set of commands from what is supported by
+      the remote-control IRCC-IP commands.
       </p>
+      <h3>Pre-set commands</h3>
+      </a>
+      <div class="columns" id="rest-commands">
+        <button type="button" class="rest-command" id="getCurrentTime-button">getCurrentTime</button>
+        <button type="button" class="rest-command" id="getApplicationList-button">getApplicationList</button>
+        <button type="button" class="rest-command" id="reboot-button2">Reboot</button>
+      </div>
+      <p>
+      <label for="rest-service-output">API command output:</label>
+      <textarea id="rest-service-output" autocorrect="off" autocapitalize="none" spellcheck="false" rows="10" cols="72" readonly="true"></textarea>
+      <p>
       <form id="rest-service-form">
         <fieldset>
-          <legend><h3>Call a service</h3></legend>
-          <p>
+          <legend><h3>Or manually fill in REST API command details</h3></legend>
             <label for="rest-service">Name:</label>
             <select name="Service" id="rest-service" required="true">
               <option value="appControl" selected="true">appControl</option>
@@ -336,25 +341,9 @@ TvInput Confirm : TV
             <textarea id="rest-json" autocorrect="off" autocapitalize="none" spellcheck="false" rows="7" cols="72"></textarea>
           </p>
           <button type="submit">Send</button>
-          <p>
-          <label for="rest-service-output">TV API output:</label>
-          <textarea id="rest-service-output" autocorrect="off" autocapitalize="none" spellcheck="false" rows="3" cols="72" readonly="true"></textarea>
-          </p>
         </fieldset>
       </form>
-      <p>Example API call - gets the time on the TV. Select the service name <strong><em>system</em></strong>
-      and copy and paste this JSON data in the form:
-      <br/>
-      <textarea readonly="true" style="resize: none;" rows="1" cols="72">{ "method": "getCurrentTime", "id": 51, "params": [], "version": "1.1" }</textarea>
       </p>
-
-      <hr>
-      <h3>Call getApplicationList</h3>
-      </a>
-      <div id="getApplicationList-info">
-        <button type="button" id="getApplicationList-button">getApplicationList</button>
-      </div>
-      <div id="getApplicationList-output">(getApplicationList output will show up here.)</div>
 
       <h3>Setup</h3>
       <p>Follow the Help page instructions to setup the IP address and pre-auth key.
@@ -362,7 +351,6 @@ TvInput Confirm : TV
         Javascript console messages.</p>
     </div> <!-- tab-restapi-content -->
   </div> <!-- tabs-all-content -->
-  <hr>
   <!-- End Document =============================================== -->
   <script src="sony-tv.js"></script>
 </body>

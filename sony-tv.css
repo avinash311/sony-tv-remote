@@ -51,7 +51,6 @@ button:hover {
   background: linear-gradient(#aca, #afa);
 }
 
-
 /**
  * Each tv command should be displayed in larger size.
  */
@@ -74,12 +73,6 @@ button:hover {
   font-style: normal;
 }
 
-.tv-command:focus,
-.tv-command:hover {
-  background: #aca; /* For browsers that do not support gradients */
-  background: linear-gradient(#aca, #afa);
-}
-
 /* Custom command sequence input box */
 #tv-command-input fieldset {
   border-color: #eef;
@@ -96,7 +89,6 @@ fieldset {
   font-weight: bold;
   width: 5em;
   color: #00f;
-  background-color: #eef;
 }
 #tv-command-input legend {
   color: #00f;
@@ -148,11 +140,20 @@ ul.tabs-navigation {
   background-color: #292;
 }
 
-/* GetRemoteControllerInfo command and output */
-#getApplicationList-info, #controller-info {
+/* REST RPC GetRemoteControllerInfo command and output */
+#rest-commands, #controller-info {
   padding: 10px 20px;
   border: 1px solid black;
 }
+.rest-command {
+  font-size: 1.1em;
+  padding: 10px 10px;
+  margin: 5px 5px;
+  border-radius: 10px;
+  background: #f00; /* For browsers that do not support gradients */
+  background: linear-gradient(#fac, #faf);
+}
+
 #rest-service-output {
   background: #ECECEC;
 }
