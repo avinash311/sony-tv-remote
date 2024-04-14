@@ -45,8 +45,7 @@ let SONY_TV_IP = ''; // updated from local storage
 let SONY_TV_PRESHARED_KEY = '';
 // Default list of channels to show as quick-access channel command buttons
 // Format of each button is command-or-channel-number : button-name\n
-const DEFAULT_COMMAND_BUTTONS = `
-4.1 Enter : CBS 4
+const DEFAULT_COMMAND_BUTTONS = `4.1 Enter : CBS 4
 4.3 Enter : dabl 4.3
 4.5 Enter : Catchy
 5.2 Enter : MeTV 5.2
