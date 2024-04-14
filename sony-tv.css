@@ -150,8 +150,8 @@ ul.tabs-navigation {
   padding: 10px 10px;
   margin: 5px 5px;
   border-radius: 10px;
-  background: #f00; /* For browsers that do not support gradients */
-  background: linear-gradient(#fac, #faf);
+  background: #fcc; /* For browsers that do not support gradients */
+  background: linear-gradient(#fbb, #fdd);
 }
 
 #rest-service-output {
