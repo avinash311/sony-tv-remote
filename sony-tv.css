@@ -9,7 +9,7 @@
 }
 
 .columns .one-fourth-item {
-  flex-basis: 21%; /* 1/4 * (100 - margin-left*4 - margin-right*4) */
+  flex-basis: 23%; /* 1/4 * (100 - margin-left*4 - margin-right*4) */
   margin: 5px 2px; /* Add some space around left/right edges of each item */
 }
 
@@ -65,12 +65,30 @@ button:hover {
   text-decoration: none;
   /* this also helps on narrow width displays when the buttons are stacked */
   width: 6em; /* default width */
-  background: #aac; /* For browsers that do not support gradients */
-  background: linear-gradient(#aac, #aaf);
+  background: #cce; /* For browsers that do not support gradients */
+  background: linear-gradient(#ddf, #bbd);
 }
 
-.tv-command i {
-  font-style: normal;
+#tv-channel-numbers .tv-command {
+  background: #eeb; /* For browsers that do not support gradients */
+  background: linear-gradient(#eed, #ee9);
+}
+
+#tv-volume-channel .tv-command,
+#tv-ffrw .tv-command {
+  background: #ccf;
+  background: linear-gradient(#bbf, #ddf);
+}
+
+/* Need to redo focus and hover for all .tv-command overridden backgrounds */
+#tv-channel-numbers .tv-command:focus,
+#tv-channel-numbers .tv-command:hover,
+#tv-volume-channel .tv-command:focus,
+#tv-volume-channel .tv-command:hover,
+#tv-ffrw .tv-command:focus,
+#tv-ffrw .tv-command:hover {
+  background: #aca; /* For browsers that do not support gradients */
+  background: linear-gradient(#aca, #afa);
 }
 
 /* Custom command sequence input box */
@@ -102,41 +120,32 @@ fieldset {
 
 /* Tabs */
 
-ul.tabs-navigation {
-  list-style-type: none;
-  margin: 0;
+.tab-link {
   padding: 0;
-  overflow: hidden;
   background-color: #ccc;
   font-size: 1.1em;
   font-weight: bold;
-  border: 1px solid black;
+  border: 1px solid gray;
 }
 
-.tabs-navigation li {
-  float: left;
-  border-right: 1px solid black;
-}
-
-.tabs-navigation li a {
+.tab-link a {
   display: block;
   color: black;
   text-align: center;
-  padding: 10px 20px;
+  padding: 10px 3px;
   text-decoration: none;
 }
 
 /* Javascript adds this class to highlight active tab link */
 
 .tab-color-active {
-  background-color: #5B5;
+  background-color: #5E5;
 }
-
 
 /* Change the link color to on hover */
 
-.tabs-navigation li a:focus,
-.tabs-navigation li a:hover {
+.tab-link a:focus,
+.tab-link a:hover {
   background-color: #292;
 }
 

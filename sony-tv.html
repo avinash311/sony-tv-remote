@@ -42,14 +42,12 @@
      scripts to server side Javascript. Use a web search such as "Sony
      TV IRCC" to find references.
   ================================================================= -->
-  <ul class="tabs-navigation">
-    <!-- id of links must be same id as tab, with -link replaced by -content.
-         Ex: tab-buttons-link and tab-buttons-content -->
-    <li class="tab-link" id="tab-buttons-link"><a>Buttons IRCC</a> </li>
-    <li class="tab-link" id="tab-restapi-link"><a>Buttons REST</a> </li>
-    <li class="tab-link" id="tab-setup-link"><a>Setup</a> </li>
-    <li class="tab-link" id="tab-help-link"><a>Help</a> </li>
-  </ul>
+  <div class="columns" id="tabs-navigation">
+    <div class="one-fourth-item tab-link" id="tab-buttons-link"><a>Buttons IRCC</a></div>
+    <div class="one-fourth-item tab-link" id="tab-restapi-link"><a>Buttons REST</a></div>
+    <div class="one-fourth-item tab-link" id="tab-setup-link"><a>Setup</a></div>
+    <div class="one-fourth-item tab-link" id="tab-help-link"><a>Help</a></div>
+  </div>
   <!-- display error/status messages on a popup, usually centered on browser page using css -->
   <div class="popup-text hide-initial" id="popup-text">Sony TV Remote Control</div>
   <hr>
@@ -58,13 +56,13 @@
       <!-- Frequently Used -->
       <div class="columns" id="tv-volume">
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="TvPower">ON &middot; OFF <i></i> </button>
+          <button type="button" class="tv-command" data-stv.commands="TvPower">ON &middot; OFF</button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="Mute">Muting</button>
+          <button type="button" class="tv-command" data-stv.commands="Mute">Mute &#x1F507;</button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="Jump">Jump <i>&#x21B6;</i> </button>
+          <button type="button" class="tv-command" data-stv.commands="Jump">Jump &#x21B6;</button>
         </div>
         <!-- Command input text box -->
         <form id="tv-command-input">
@@ -116,10 +114,10 @@
       <!-- No longer used so remove buttons from web page
       <div class="columns" id="tv-display-ratio">
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="Wide Up Up Up Return">Wide&nbsp;Zoom <i></i> </button>
+          <button type="button" class="tv-command" data-stv.commands="Wide Up Up Up Return">Wide&nbsp;Zoom </button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="Wide Down Down Down Up Up Return">Normal<i></i> </button>
+          <button type="button" class="tv-command" data-stv.commands="Wide Down Down Down Up Up Return">Normal</button>
         </div>
         <div class="one-fourth-item">
           <button type="button" class="tv-command" data-stv.commands="Wide Up Return">Wide&nbsp;&#x21E1;</button>
@@ -133,29 +131,29 @@
       <!-- Volume and Channel Increment -->
       <div class="columns" id="tv-volume-channel">
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="VolumeDown">&#x1f509; Vol <i>-</i> </button>
+          <button type="button" class="tv-command" data-stv.commands="VolumeDown">&#x1f509; Vol &#x25bd;</button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="VolumeUp">&#x1f50A; Vol <i>+</i> </button>
+          <button type="button" class="tv-command" data-stv.commands="VolumeUp">&#x1f50A; Vol &#x25b3;</button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="ChannelDown">CH <i>-</i> </button>
+          <button type="button" class="tv-command" data-stv.commands="ChannelDown">CH &#x2796;</button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="ChannelUp">CH <i>+</i> </button>
+            <button type="button" class="tv-command" data-stv.commands="ChannelUp">CH &#x2795;</button>
         </div>
       </div>
       <hr>
       <!-- Mute Off Reboot  -->
       <div class="columns" id="tv-off">
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="PowerOff">OFF <i>&#x2B58;</i> </button>
+          <button type="button" class="tv-command" data-stv.commands="PowerOff">OFF &#x2B58;</button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="Mute">Muting</button>
+          <button type="button" class="tv-command" data-stv.commands="Mute">Mute &#x1F507;</button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="Jump">Jump <i>&#x21B6;</i> </button>
+          <button type="button" class="tv-command" data-stv.commands="Jump">Jump &#x21B6;</button>
         </div>
         <div class="one-fourth-item">
           <button type="button" class="rest-command" id="reboot-button1">Reboot &#x21ba;</button>
@@ -165,16 +163,16 @@
       <!-- Fast forward, rewind -->
       <div class="columns" id="tv-ffrw">
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="Pause" title="Pause"><i>Pause &#x23F8;</i></button>
+          <button type="button" class="tv-command" data-stv.commands="Pause" title="Pause">Pause &#x23F8;</button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="Rewind" title="Rewind"><i>&#x23EA; Rewind</i></button>
+          <button type="button" class="tv-command" data-stv.commands="Rewind" title="Rewind">&#x23EA; Rewind</button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="Play" title="Play"><i>Play &#x23F5;</i></button>
+          <button type="button" class="tv-command" data-stv.commands="Play" title="Play">Play &#x25B6;</button>
         </div>
         <div class="one-fourth-item">
-          <button type="button" class="tv-command" data-stv.commands="Forward" title="Forward"><i>Forward &#x23E9;</i></button>
+          <button type="button" class="tv-command" data-stv.commands="Forward" title="Forward">Forward &#x23E9;</button>
         </div>
       </div>
       <hr>

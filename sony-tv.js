@@ -560,6 +560,7 @@ function createChannelButtons(commandsString) {
     newButton.setAttribute('class', 'tv-command');
     newButton.setAttribute('type', 'button');
     newButton.setAttribute('data-' + DATASET_COMMANDS, command);
+    newButton.setAttribute('title', command); // hover text
     newItem.appendChild(newButton);
 
     // add the newly created row element and its content into the DOM 
