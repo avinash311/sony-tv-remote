@@ -649,7 +649,18 @@ function onLoadFunction() {
   const currentTimeJson = '{"method": "getCurrentTime","params": [],"id": 51,"version": "1.1"}';
   connectRestAPIButton(currentTimeButton, 'system', currentTimeJson);
   }
-
+  {
+  // Pre-built commands: REST API call to start Tubi
+  const tubiButton = document.getElementById('tubi-button');
+  const tubiJson = '{"method": "setActiveApp", "id": 601, "params": [{ "uri": "com.sony.dtv.com.tubitv.com.tubitv.activities.MainActivity"}], "version": "1.0" }';
+  connectRestAPIButton(tubiButton, 'appControl', tubiJson);
+  }
+  {
+  // Pre-built commands: REST API call to start YouTube
+  const button = document.getElementById('youtube-button');
+  const json = '{"method": "setActiveApp", "id": 601, "params": [{ "uri": "com.sony.dtv.com.google.android.youtube.tv.com.google.android.apps.youtube.tv.activity.ShellActivity"}], "version": "1.0" }';
+  connectRestAPIButton(button, 'appControl', json);
+  }
   {
   // Pre-built commands: REST API requestReboot call and output
   const rebootJson = '{"method": "requestReboot","params": [],"id": 10,"version":"1.0"}';
