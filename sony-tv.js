@@ -650,10 +650,10 @@ function onLoadFunction() {
   connectRestAPIButton(currentTimeButton, 'system', currentTimeJson);
   }
   {
-  // Pre-built commands: REST API call to start Tubi
-  const tubiButton = document.getElementById('tubi-button');
-  const tubiJson = '{"method": "setActiveApp", "id": 601, "params": [{ "uri": "com.sony.dtv.com.tubitv.com.tubitv.activities.MainActivity"}], "version": "1.0" }';
-  connectRestAPIButton(tubiButton, 'appControl', tubiJson);
+  // Pre-built commands: REST API call to start Roku
+  const rokuButton = document.getElementById('roku-button');
+  const rokuJson = '{"method": "setActiveApp", "id": 601, "params": [{ "uri": "com.sony.dtv.com.roku.web.trc.com.roku.web.trc.MainActivity"}], "version": "1.0" }';
+  connectRestAPIButton(rokuButton, 'appControl', rokuJson);
   }
   {
   // Pre-built commands: REST API call to start YouTube
