@@ -649,12 +649,14 @@ function onLoadFunction() {
   const currentTimeJson = '{"method": "getCurrentTime","params": [],"id": 51,"version": "1.1"}';
   connectRestAPIButton(currentTimeButton, 'system', currentTimeJson);
   }
+  /*
   {
   // Pre-built commands: REST API call to start Roku
   const rokuButton = document.getElementById('roku-button');
   const rokuJson = '{"method": "setActiveApp", "id": 601, "params": [{ "uri": "com.sony.dtv.com.roku.web.trc.com.roku.web.trc.MainActivity"}], "version": "1.0" }';
   connectRestAPIButton(rokuButton, 'appControl', rokuJson);
   }
+  */
   {
   // Pre-built commands: REST API call to start YouTube
   const button = document.getElementById('youtube-button');
@@ -742,6 +744,11 @@ function callRestServiceForm (e) {
 
 // Connect a button to given REST API service + json
 function connectRestAPIButton (controller, service, json) {
+  if (controller == null) {
+      const message = 'Error: NULL controller - missing HTML id for ' + service + ' ' + json;
+      console.error(message);
+      return;
+  }
   const serviceElement = document.getElementById("rest-service");
   const jsonElement = document.getElementById("rest-json");
   const output = document.getElementById("rest-service-output");
